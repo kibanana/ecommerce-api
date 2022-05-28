@@ -1,4 +1,38 @@
-import { Controller } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    HttpException,
+    HttpStatus,
+    Post,
+} from '@nestjs/common';
+import { StoreService } from '../store/store.service';
+import { CustomerService } from './customer.service';
+import { CustomerCreateDto } from './dto/customer-create.dto';
 
-@Controller('customer')
-export class CustomerController {}
+@Controller('customers')
+export class CustomerController {
+    constructor(
+        private customerService: CustomerService,
+        private storeService: StoreService,
+    ) {}
+
+    @Post()
+    async CreateCustomer(@Body() customerCreateData: CustomerCreateDto) {
+        try {
+            const store = await this.storeService.getItemById(customerCreateData.store);
+            if (!store) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const customer = await this.customerService.createItem(customerCreateData);
+            
+            return { id: customer._id };
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
