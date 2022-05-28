@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
-import { StoreCreateDto } from './dto/storeCreate.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { StoreCreateDto } from './dto/store-create.dto';
 import { Store, StoreDocument } from './schema/store.schema';
 
 @Injectable()
@@ -21,5 +21,13 @@ export class StoreService {
 
     getItem(email: string) {
         return this.storeModel.findOne({ email });
+    }
+
+    async doesExistByName(name: string) {
+        return (await this.storeModel.countDocuments({ name })) > 0;
+    }
+
+    async doesExistByEmail(email: string) {
+        return (await this.storeModel.countDocuments({ email })) > 0;
     }
 }

@@ -15,6 +15,16 @@ export class StoreController {
     @Post()
     async CreateStore(@Body() storeCreateData: StoreCreateDto) {
         try {
+            const doesExistByEmail = await this.storeService.doesExistByEmail(storeCreateData.email);
+            if (doesExistByEmail) {
+                throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
+            }
+            
+            const doesExistByName = await this.storeService.doesExistByName(storeCreateData.name);
+            if (doesExistByName) {
+                throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
+            }
+
             const store = await this.storeService.createItem(storeCreateData);
             return { id: store._id };
         } catch (err) {
