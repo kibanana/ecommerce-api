@@ -22,4 +22,8 @@ export class CustomerService {
     getItem(email: string) {
         return this.customerModel.findOne({ email });
     }
+
+    async doesExist(store: string, email: string) {
+        return (await this.customerModel.countDocuments({ store, email })) > 0;
+    }
 }

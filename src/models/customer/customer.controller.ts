@@ -24,6 +24,11 @@ export class CustomerController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
+            const doesExist = await this.customerService.doesExist(customerCreateData.store, customerCreateData.email);
+            if (doesExist) {
+                throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
+            }
+            
             const customer = await this.customerService.createItem(customerCreateData);
             
             return { id: customer._id };
