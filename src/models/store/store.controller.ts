@@ -1,5 +1,11 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
-import { StoreCreateDto } from './dto/storeCreate.dto';
+import {
+    Body,
+    Controller,
+    HttpException,
+    HttpStatus,
+    Post,
+} from '@nestjs/common';
+import { StoreCreateDto } from './dto/store-create.dto';
 import { StoreService } from './store.service';
 
 @Controller('stores')
