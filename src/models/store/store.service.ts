@@ -14,4 +14,12 @@ export class StoreService {
         const store = new this.storeModel({ name, email, password });
         return store.save();
     }
+
+    getItemById(id: string) {
+        return this.storeModel.findById(id);
+    }
+
+    getItem(email: string) {
+        return this.storeModel.findOne({ email });
+    }
 }
