@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { StoreCreateDto } from './dto/store-create.dto';
 import { Store, StoreDocument } from './schema/store.schema';
 import { StoreListDto } from './dto/store-list.dto';
+import { StoreUpdateDto } from './dto/store-update.dto';
 
 @Injectable()
 export class StoreService {
@@ -38,5 +39,9 @@ export class StoreService {
 
     async doesExistByEmail(email: string) {
         return (await this.storeModel.countDocuments({ email })) > 0;
+    }
+
+    updateItem(id: string, { name, email }: StoreUpdateDto) {
+        return this.storeModel.findByIdAndUpdate(id, { name, email });
     }
 }
