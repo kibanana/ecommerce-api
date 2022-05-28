@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { StoreCreateDto } from './dto/store-create.dto';
 import { Store, StoreDocument } from './schema/store.schema';
+import { StoreListDto } from './dto/store-list.dto';
 
 @Injectable()
 export class StoreService {
@@ -13,6 +14,14 @@ export class StoreService {
     createItem({ name, email, password }: StoreCreateDto) {
         const store = new this.storeModel({ name, email, password });
         return store.save();
+    }
+
+    getList({ offset, limit }: StoreListDto) {
+        return this.storeModel.find(
+            {},
+            '-password',
+            { skip: offset * limit, limit }
+        );
     }
 
     getItemById(id: string) {
