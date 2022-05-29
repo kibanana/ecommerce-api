@@ -36,4 +36,8 @@ export class ProductService {
             { name, price, categories, customFields }
         );
     }
+
+    deleteItem(id: string) {
+        return this.productModel.findByIdAndDelete(id);
+    }
 }

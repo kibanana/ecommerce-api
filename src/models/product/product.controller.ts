@@ -22,6 +22,7 @@ import { GetMyProductItemDto } from './dto/get-my-product-item.dto';
 import { GetProductItemDto } from './dto/get-product-item.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductParamDto } from './dto/update-product.params.dto';
+import { DeleteProductDto } from './dto/delete-product.dto';
 
 @Controller()
 export class ProductController {
@@ -166,6 +167,33 @@ export class ProductController {
             }
 
             const result = await this.productService.updateItem(id, updateProductData);
+            if (!result) {
+                throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+            
+            return;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Delete('/stores/me/products/:id')
+    async DeleteProduct(@Param() deleteProductParamData: DeleteProductDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            const { id } = deleteProductParamData;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const result = await this.productService.deleteItem(id);
             if (!result) {
                 throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
