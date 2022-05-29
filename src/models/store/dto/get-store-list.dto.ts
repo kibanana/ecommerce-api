@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
 
-export class StoreListDto {
+export class GetStoreListDto {
     @IsNumber()
     @Type(() => Number)
     @IsOptional()

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { StoreService } from '../store/store.service';
 import { CustomerService } from './customer.service';
-import { CustomerCreateDto } from './dto/customer-create.dto';
+import { CustomerCreateDto } from './dto/create-customer.dto';
 
 @Controller('customers')
 export class CustomerController {

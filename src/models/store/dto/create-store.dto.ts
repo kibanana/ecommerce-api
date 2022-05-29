@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
 
-export class StoreUpdateDto {
+export class CreateStoreDto {
     @IsNotEmpty()
     @IsString()
     readonly name: string;
@@ -10,8 +10,13 @@ export class StoreUpdateDto {
     @IsEmail()
     readonly email: string;
 
-    constructor(name: string, email: string) {
+    @IsNotEmpty()
+    @IsString()
+    readonly password: string;
+
+    constructor(name: string, email: string, password: string) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 }

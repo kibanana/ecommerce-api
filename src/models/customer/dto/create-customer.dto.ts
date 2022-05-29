@@ -18,7 +18,8 @@ export class CustomerCreateDto {
     @IsString()
     readonly password: string;
 
-    constructor(name: string, email: string, password: string) {
+    constructor(store: string, name: string, email: string, password: string) {
+        this.store = store;
         this.name = name;
         this.email = email;
         this.password = password;
