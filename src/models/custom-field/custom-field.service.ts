@@ -18,6 +18,13 @@ export class CustomFieldService {
         });
     }
 
+    getOrderList(store: string) {
+        return this.customFieldModel.find({
+            store,
+            target: CustomFieldTarget.Order,
+        });
+    }
+
     getProductList(store: string) {
         return this.customFieldModel.find({
             store,
