@@ -4,6 +4,7 @@ import {
     Get,
     HttpException,
     HttpStatus,
+    Param,
     Post,
     Query,
     Request,
@@ -18,6 +19,7 @@ import { ProductService } from '../product/product.service';
 import { Product } from '../product/schema/product.schema';
 import { StoreJwtStrategyGuard } from 'src/auth/guard/store-jwt.guard';
 import { GetOrderListDto } from './dto/get-order-list.dto';
+import { GetMyOrderItemDto } from './dto/get-my-order-item.dto';
 
 @Controller()
 export class OrderController {
@@ -55,6 +57,8 @@ export class OrderController {
                 throw new HttpException('ERR_FORGERY_DATA', HttpStatus.CONFLICT);
             }
 
+            // TODO custom fields
+
             const order = await this.orderService.createItem(store, customer, createOrderData);
 
             return { id: order._id };
@@ -69,7 +73,7 @@ export class OrderController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Get('/stores/me/orders')
-    async GetMyProductList(@Query() getOrderListData: GetOrderListDto, @Request() req) {
+    async GetMyOrderList(@Query() getOrderListData: GetOrderListDto, @Request() req) {
         try {
             const { id: store } = req.user;
             let { offset, limit } = getOrderListData;
@@ -84,6 +88,32 @@ export class OrderController {
 
             const data = await this.orderService.getList(store, { offset, limit } as GetOrderListDto);
             return data;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Get('/stores/me/orders/:id')
+    async GetMyOrder(@Param() getMyOrderItemData: GetMyOrderItemDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const order = await this.orderService.getItem(getMyOrderItemData);
+            if (!order) {
+                throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            return order;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

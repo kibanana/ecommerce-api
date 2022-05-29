@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { GetOrderListDto } from './dto/get-order-list.dto';
 import { Order, OrderDocument } from './schema/order.schema';
+import { GetMyOrderItemDto } from './dto/get-my-order-item.dto';
 
 @Injectable()
 export class OrderService {
@@ -35,5 +36,18 @@ export class OrderService {
         const count = await this.orderModel.countDocuments({ store });
 
         return { list, count };
+    }
+
+    getItem({ id }: GetMyOrderItemDto) {
+        return this.orderModel
+            .findById(id)
+            .populate({
+                path: 'customer',
+                select: { name: true, email: true }
+            })
+            .populate({
+                path: 'products',
+                select: { name: true, price: true, customFields: true }
+            });
     }
 }
