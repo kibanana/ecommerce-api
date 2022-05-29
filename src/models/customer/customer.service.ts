@@ -22,13 +22,13 @@ export class CustomerService {
     getList(store: string, { offset, limit }: GetCustomerListDto) {
         return this.customerModel.find(
             { store },
-            '-store -password',
+            { store: false, password: false, customFields: false },
             { skip: offset * limit, limit }
         );
     }
 
     getItemById(id: string) {
-        return this.customerModel.findById(id, '-password');
+        return this.customerModel.findById(id, { password: false });
     }
     
     getItem(store: string, email: string) {

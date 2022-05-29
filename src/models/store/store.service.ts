@@ -22,13 +22,13 @@ export class StoreService {
     getList({ offset, limit }: GetStoreListDto) {
         return this.storeModel.find(
             {},
-            '-password',
+            { password: false },
             { skip: offset * limit, limit }
         );
     }
 
     getItemById(id: string) {
-        return this.storeModel.findById(id, '-password');
+        return this.storeModel.findById(id, { password: false });
     }
 
     getItem(email: string) {
