@@ -4,6 +4,7 @@ import {
     Get,
     HttpException,
     HttpStatus,
+    Patch,
     Post,
     Query,
     Request,
@@ -15,6 +16,7 @@ import { GetCustomerListDto } from '../custom-field/dto/get-customer-list.dto';
 import { StoreService } from '../store/store.service';
 import { CustomerService } from './customer.service';
 import { CustomerCreateDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Controller('customers')
 export class CustomerController {
@@ -73,13 +75,49 @@ export class CustomerController {
     @Get('/me')
     async GetCustomer(@Request() req) {
         try {
-            const { id } = req.user;
+            const { id, store } = req.user;
+
+            const doesExist = await this.storeService.getItemById(store);
+            if (!doesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
 
             const customer = await this.customerService.getItemById(id);
             if (!customer) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
             return customer;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(CustomerJwtStrategyGuard)
+    @Patch('/me')
+    async UpdateCustomer(@Body() updateCustomerData: UpdateCustomerDto, @Request() req) {
+        try {
+            const { id, store } = req.user;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.CONFLICT);
+            }
+
+            const customerDoesExist = await this.customerService.doesExist(store, updateCustomerData.email);
+            if (customerDoesExist) {
+                throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
+            }
+
+            const result = await this.customerService.updateItem(id, updateCustomerData);
+            if (!result) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

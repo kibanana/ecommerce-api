@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { GetCustomerListDto } from '../custom-field/dto/get-customer-list.dto';
 import { CustomerCreateDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer, CustomerDocument } from './schema/customer.schema';
 
 @Injectable()
@@ -38,5 +39,9 @@ export class CustomerService {
 
     async doesExist(store: string, email: string) {
         return (await this.customerModel.countDocuments({ store, email })) > 0;
+    }
+
+    updateItem(id: string, { name, email }: UpdateCustomerDto) {
+        return this.customerModel.findByIdAndUpdate(id, { name, email });
     }
 }
