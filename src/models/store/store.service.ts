@@ -54,8 +54,10 @@ export class StoreService {
         return this.storeModel.findByIdAndUpdate(id, { name, email });
     }
 
-    updateItemPasssword(id: string, { newPassword: password }: UpdateStorePasswordDto) {
-        return this.storeModel.findByIdAndUpdate(id, { password });
+    async updateItemPasssword(id: string, { newPassword: password }: UpdateStorePasswordDto) {
+        const store = await this.storeModel.findById(id);
+        store.password = password;
+        return store.save();
     }
 
     deleteItem(id: string) {

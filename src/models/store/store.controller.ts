@@ -114,7 +114,7 @@ export class StoreController {
 
             const isDuplicated = updateStorePasswordData.oldPassword === updateStorePasswordData.newPassword;
             if (isDuplicated) {
-                throw new HttpException('ERR_PASSWORD_ALREADY_EXISTS', HttpStatus.CONFLICT);
+                throw new HttpException('ERR_DUPLICATED_PARAM', HttpStatus.CONFLICT);
             }
 
             const isCertified = await this.storeService.comparePassword(store, updateStorePasswordData);
