@@ -60,4 +60,8 @@ export class CustomerService {
         customer.password = password;
         return customer.save();
     }
+
+    deleteItem(id: string) {
+        return this.customerModel.findByIdAndDelete(id);
+    }
 }

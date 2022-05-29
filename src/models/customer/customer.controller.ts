@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpException,
     HttpStatus,
@@ -152,6 +153,32 @@ export class CustomerController {
             }
 
             const result = await this.customerService.updateItemPasssword(id, updateCustomerPasswordData);
+            if (!result) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            return;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(CustomerJwtStrategyGuard)
+    @Delete('/customers/me')
+    async DeleteCustomer(@Request() req) {
+        try {
+            const { id, store } = req.user;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const result = await this.customerService.deleteItem(id);
             if (!result) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
