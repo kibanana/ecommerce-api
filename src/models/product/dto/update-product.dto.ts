@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsString, IsNotEmpty, IsNumber, ValidateNested, IsOptional } from 'class-validator';
 import { CustomField } from './custom-field.dto';
 
-export class CreateProductDto {
+export class UpdateProductDto {
     @IsNotEmpty()
     @IsString()
     readonly name: string;

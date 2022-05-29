@@ -5,6 +5,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { GetMyProductItemDto } from './dto/get-my-product-item.dto';
 import { GetProductListDto } from './dto/get-product-list.dto';
 import { Product, ProductDocument } from './schema/product.schema';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -12,12 +13,12 @@ export class ProductService {
         @InjectModel(Product.name) private productModel: Model<ProductDocument>,
     ) {}
 
-    createItem(store, { name, price, categories, customFields }: CreateProductDto) {
+    createItem(store: string, { name, price, categories, customFields }: CreateProductDto) {
         const product = new this.productModel({ store, name, price, categories, customFields });
         return product.save();
     }
 
-    getList(store, { offset, limit }: GetProductListDto) {
+    getList(store: string, { offset, limit }: GetProductListDto) {
         return this.productModel.find(
             { store },
             { customFields: false },
@@ -27,5 +28,12 @@ export class ProductService {
 
     getItem({ id }: GetMyProductItemDto) {
         return this.productModel.findById(id);
+    }
+
+    updateItem(id: string, { name, price, categories, customFields }: UpdateProductDto) {
+        return this.productModel.findByIdAndUpdate(
+            id,
+            { name, price, categories, customFields }
+        );
     }
 }

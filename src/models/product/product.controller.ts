@@ -1,10 +1,12 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpException,
     HttpStatus,
     Param,
+    Patch,
     Post,
     Query,
     Request,
@@ -18,6 +20,8 @@ import { StoreJwtStrategyGuard } from '../../auth/guard/store-jwt.guard';
 import { GetProductListParamDto } from './dto/get-product-list-param.dto';
 import { GetMyProductItemDto } from './dto/get-my-product-item.dto';
 import { GetProductItemDto } from './dto/get-product-item.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { UpdateProductParamDto } from './dto/update-product.params.dto';
 
 @Controller()
 export class ProductController {
@@ -102,7 +106,7 @@ export class ProductController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Get('/stores/me/products/:id')
-    async GetMyProductItem(@Param() getMyProductItemData: GetMyProductItemDto, @Request() req) {
+    async GetMyProduct(@Param() getMyProductItemData: GetMyProductItemDto, @Request() req) {
         try {
             const { id: store } = req.user;
 
@@ -127,7 +131,7 @@ export class ProductController {
     }
 
     @Get('/stores/:storeid/products/:id')
-    async GetProductItem(@Param() getProductItemData: GetProductItemDto, @Request() req) {
+    async GetProduct(@Param() getProductItemData: GetProductItemDto, @Request() req) {
         try {
             const storeDoesExist = await this.storeService.doesExistById(getProductItemData.storeid);
             if (!storeDoesExist) {
@@ -140,6 +144,33 @@ export class ProductController {
             }
 
             return product;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Patch('/stores/me/products/:id')
+    async UpdateProduct(@Param() updateProductParamData: UpdateProductParamDto, @Body() updateProductData: UpdateProductDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            const { id } = updateProductParamData;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const result = await this.productService.updateItem(id, updateProductData);
+            if (!result) {
+                throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+            
+            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
