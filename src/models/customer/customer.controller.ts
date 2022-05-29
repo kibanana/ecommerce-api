@@ -4,6 +4,7 @@ import {
     Get,
     HttpException,
     HttpStatus,
+    Param,
     Patch,
     Post,
     Query,
@@ -18,28 +19,29 @@ import { CustomerService } from './customer.service';
 import { CustomerCreateDto } from './dto/create-customer.dto';
 import { UpdateCustomerPasswordDto } from './dto/update-customer-password.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { CustomerCreateParamDto } from './dto/create-customer-param.dto';
 
-@Controller('customers')
+@Controller()
 export class CustomerController {
     constructor(
         private customerService: CustomerService,
         private storeService: StoreService,
     ) {}
 
-    @Post()
-    async CreateCustomer(@Body() customerCreateData: CustomerCreateDto) {
+    @Post('/stores/:id/customers')
+    async CreateCustomer(@Param() customerCreateParamData: CustomerCreateParamDto, @Body() customerCreateData: CustomerCreateDto) {
         try {
-            const storeDoesExist = await this.storeService.doesExistById(customerCreateData.store);
+            const storeDoesExist = await this.storeService.doesExistById(customerCreateParamData.id);
             if (!storeDoesExist) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const customerDoesExist = await this.customerService.doesExist(customerCreateData.store, customerCreateData.email);
+            const customerDoesExist = await this.customerService.doesExist(customerCreateParamData.id, customerCreateData.email);
             if (customerDoesExist) {
                 throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
             
-            const customer = await this.customerService.createItem(customerCreateData);
+            const customer = await this.customerService.createItem({ ...customerCreateParamData, ...customerCreateData });
             
             return { id: customer._id };
         } catch (err) {
@@ -52,7 +54,7 @@ export class CustomerController {
     }
 
     @UseGuards(StoreJwtStrategyGuard)
-    @Get()
+    @Get('/customers')
     async GetCustomerList(@Query() customerListData: GetCustomerListDto, @Request() req) {
         try {
             const { id: store } = req.user;
@@ -73,7 +75,7 @@ export class CustomerController {
     }
 
     @UseGuards(CustomerJwtStrategyGuard)
-    @Get('/me')
+    @Get('/customers/me')
     async GetCustomer(@Request() req) {
         try {
             const { id, store } = req.user;
@@ -98,7 +100,7 @@ export class CustomerController {
     }
 
     @UseGuards(CustomerJwtStrategyGuard)
-    @Patch('/me')
+    @Patch('/customers/me')
     async UpdateCustomer(@Body() updateCustomerData: UpdateCustomerDto, @Request() req) {
         try {
             const { id, store } = req.user;
@@ -129,7 +131,7 @@ export class CustomerController {
     }
 
     @UseGuards(CustomerJwtStrategyGuard)
-    @Patch('/me/password')
+    @Patch('/customers/me/password')
     async UpdateCustomerPassword(@Body() updateCustomerPasswordData: UpdateCustomerPasswordDto, @Request() req) {
         try {
             const { id: store } = req.user;

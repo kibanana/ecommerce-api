@@ -1,10 +1,6 @@
-import { IsString, IsNotEmpty, IsEmail, IsMongoId } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
 
 export class CustomerCreateDto {
-    @IsNotEmpty()
-    @IsMongoId()
-    readonly store: string;
-
     @IsNotEmpty()
     @IsString()
     readonly name: string;
@@ -18,8 +14,7 @@ export class CustomerCreateDto {
     @IsString()
     readonly password: string;
 
-    constructor(store: string, name: string, email: string, password: string) {
-        this.store = store;
+    constructor(name: string, email: string, password: string) {
         this.name = name;
         this.email = email;
         this.password = password;

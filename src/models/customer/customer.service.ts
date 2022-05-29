@@ -7,6 +7,7 @@ import { CustomerCreateDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { UpdateCustomerPasswordDto } from './dto/update-customer-password.dto';
 import { Customer, CustomerDocument } from './schema/customer.schema';
+import { CustomerCreateParamDto } from './dto/create-customer-param.dto';
 
 @Injectable()
 export class CustomerService {
@@ -14,7 +15,7 @@ export class CustomerService {
         @InjectModel(Customer.name) private customerModel: Model<CustomerDocument>,
     ) {}
 
-    createItem({ store, name, email, password }: CustomerCreateDto) {
+    createItem({ id: store, name, email, password }: CustomerCreateParamDto & CustomerCreateDto) {
         const customer = new this.customerModel({ store, name, email, password });
         return customer.save();
     }
