@@ -16,6 +16,7 @@ import { GetCustomerListDto } from '../custom-field/dto/get-customer-list.dto';
 import { StoreService } from '../store/store.service';
 import { CustomerService } from './customer.service';
 import { CustomerCreateDto } from './dto/create-customer.dto';
+import { UpdateCustomerPasswordDto } from './dto/update-customer-password.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Controller('customers')
@@ -104,7 +105,7 @@ export class CustomerController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.CONFLICT);
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
             const customerDoesExist = await this.customerService.doesExist(store, updateCustomerData.email);
@@ -113,6 +114,42 @@ export class CustomerController {
             }
 
             const result = await this.customerService.updateItem(id, updateCustomerData);
+            if (!result) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            return;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(CustomerJwtStrategyGuard)
+    @Patch('/me/password')
+    async UpdateCustomerPassword(@Body() updateCustomerPasswordData: UpdateCustomerPasswordDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const isDuplicated = updateCustomerPasswordData.oldPassword === updateCustomerPasswordData.newPassword;
+            if (isDuplicated) {
+                throw new HttpException('ERR_DUPLICATED_PARAM', HttpStatus.CONFLICT);
+            }
+
+            const isCertified = await this.customerService.comparePassword(store, updateCustomerPasswordData);
+            if (!isCertified) {
+                throw new HttpException('ERR_INVALID_ACCESS', HttpStatus.FORBIDDEN);
+            }
+
+            const result = await this.customerService.updateItemPasssword(store, updateCustomerPasswordData);
             if (!result) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
