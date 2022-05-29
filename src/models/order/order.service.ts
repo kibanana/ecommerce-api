@@ -38,6 +38,23 @@ export class OrderService {
         return { list, count };
     }
 
+    async getListByCustomer(store: string, customer: string, { offset, limit }: GetOrderListDto) {
+        const list = await this.orderModel
+            .find(
+                { store, customer },
+                { customFields: false },
+                { skip: offset * limit, limit }
+            )
+            .populate({
+                path: 'products',
+                select: { name: true, price: true }
+            });
+
+        const count = await this.orderModel.countDocuments({ store });
+
+        return { list, count };
+    }
+
     getItem({ id }: GetMyOrderItemDto) {
         return this.orderModel
             .findById(id)

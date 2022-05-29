@@ -20,6 +20,7 @@ import { Product } from '../product/schema/product.schema';
 import { StoreJwtStrategyGuard } from 'src/auth/guard/store-jwt.guard';
 import { GetOrderListDto } from './dto/get-order-list.dto';
 import { GetMyOrderItemDto } from './dto/get-my-order-item.dto';
+import { GetCustomerOrderListDto } from './dto/get-customer-order-list.dto';
 
 @Controller()
 export class OrderController {
@@ -73,7 +74,7 @@ export class OrderController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Get('/stores/me/orders')
-    async GetMyOrderList(@Query() getOrderListData: GetOrderListDto, @Request() req) {
+    async GetMyStoreOrderList(@Query() getOrderListData: GetOrderListDto, @Request() req) {
         try {
             const { id: store } = req.user;
             let { offset, limit } = getOrderListData;
@@ -115,6 +116,39 @@ export class OrderController {
 
             return order;
         } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Get('/stores/me/customers/:id/orders')
+    async GetCustomerOrderList(@Param() getCustomerOrderListData: GetCustomerOrderListDto, @Query() getOrderListData: GetOrderListDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            const { id } = getCustomerOrderListData;
+            let { offset, limit } = getOrderListData;
+
+            offset = isNaN(offset) ? 0 : offset;
+            limit = isNaN(limit) ? 15 : limit;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const customer = await this.customerService.getItemById(id);
+            if (!customer) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const { list, count } = await this.orderService.getListByCustomer(store, id, { offset, limit } as GetOrderListDto);
+            return { customer, list, count };
+        } catch (err) {
+            console.log(err)
             if (err instanceof HttpException) {
                 throw err;
             }
