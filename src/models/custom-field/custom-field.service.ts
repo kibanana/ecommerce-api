@@ -11,10 +11,17 @@ export class CustomFieldService {
         @InjectModel(CustomField.name) private customFieldModel: Model<CustomFieldDocument>,
     ) {}
     
-    getCustomerList({ id: store }: GetCustomFieldListDto) {
+    getCustomerList(store: string) {
         return this.customFieldModel.find({
             store,
-            target: CustomFieldTarget.Customer
+            target: CustomFieldTarget.Customer,
+        });
+    }
+
+    getProductList(store: string) {
+        return this.customFieldModel.find({
+            store,
+            target: CustomFieldTarget.Product,
         });
     }
 }

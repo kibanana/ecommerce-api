@@ -1,5 +1,4 @@
-import { IsNotEmpty, IsMongoId, IsString, IsIn } from 'class-validator';
-import { CustomFieldTarget } from '../custom-field.constants';
+import { IsNotEmpty, IsMongoId } from 'class-validator';
 
 export class GetCustomFieldListDto {
     @IsNotEmpty()
