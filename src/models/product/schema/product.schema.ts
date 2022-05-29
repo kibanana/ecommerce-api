@@ -6,7 +6,7 @@ export type ProductDocument = Product & mongoose.Document;
 
 @Schema()
 export class Product {
-    @Prop({ required: true, type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }] })
+    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Store' })
     store: Store;
 
     @Prop({ required: true })
