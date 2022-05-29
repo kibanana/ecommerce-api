@@ -80,8 +80,8 @@ export class CustomerController {
         try {
             const { id, store } = req.user;
 
-            const doesExist = await this.storeService.getItemById(store);
-            if (!doesExist) {
+            const storeDoesExist = await this.storeService.getItemById(store);
+            if (!storeDoesExist) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
@@ -134,7 +134,7 @@ export class CustomerController {
     @Patch('/customers/me/password')
     async UpdateCustomerPassword(@Body() updateCustomerPasswordData: UpdateCustomerPasswordDto, @Request() req) {
         try {
-            const { id: store } = req.user;
+            const { id, store } = req.user;
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
@@ -146,12 +146,12 @@ export class CustomerController {
                 throw new HttpException('ERR_DUPLICATED_PARAM', HttpStatus.CONFLICT);
             }
 
-            const isCertified = await this.customerService.comparePassword(store, updateCustomerPasswordData);
+            const isCertified = await this.customerService.comparePassword(id, updateCustomerPasswordData);
             if (!isCertified) {
                 throw new HttpException('ERR_INVALID_ACCESS', HttpStatus.FORBIDDEN);
             }
 
-            const result = await this.customerService.updateItemPasssword(store, updateCustomerPasswordData);
+            const result = await this.customerService.updateItemPasssword(id, updateCustomerPasswordData);
             if (!result) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }

@@ -55,7 +55,9 @@ export class CustomerService {
         return this.customerModel.findByIdAndUpdate(id, { name, email });
     }
 
-    updateItemPasssword(id: string, { newPassword: password }: UpdateCustomerPasswordDto) {
-        return this.customerModel.findByIdAndUpdate(id, { password });
+    async updateItemPasssword(id: string, { newPassword: password }: UpdateCustomerPasswordDto) {
+        const customer = await this.customerModel.findById(id);
+        customer.password = password;
+        return customer.save();
     }
 }
