@@ -40,7 +40,7 @@ export class CustomFieldController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Get('/stores/me/products/custom-fields')
-    async GetProductCustomFieldList(@Request() req) {
+    async GetMyProductCustomFieldList(@Request() req) {
         try {
             const { id: store } = req.user;
 

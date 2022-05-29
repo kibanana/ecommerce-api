@@ -17,10 +17,10 @@ import { StoreJwtStrategyGuard } from '../../auth/guard/store-jwt.guard';
 import { GetCustomerListDto } from '../custom-field/dto/get-customer-list.dto';
 import { StoreService } from '../store/store.service';
 import { CustomerService } from './customer.service';
-import { CustomerCreateDto } from './dto/create-customer.dto';
+import { CreateCustomerParamDto } from './dto/create-customer-param.dto';
+import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerPasswordDto } from './dto/update-customer-password.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { CustomerCreateParamDto } from './dto/create-customer-param.dto';
 
 @Controller()
 export class CustomerController {
@@ -30,19 +30,21 @@ export class CustomerController {
     ) {}
 
     @Post('/stores/:id/customers')
-    async CreateCustomer(@Param() customerCreateParamData: CustomerCreateParamDto, @Body() customerCreateData: CustomerCreateDto) {
+    async CreateCustomer(@Param() createCustomerParamData: CreateCustomerParamDto, @Body() createCustomerData: CreateCustomerDto) {
         try {
-            const storeDoesExist = await this.storeService.doesExistById(customerCreateParamData.id);
+            const { id: store } = createCustomerParamData
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const customerDoesExist = await this.customerService.doesExist(customerCreateParamData.id, customerCreateData.email);
+            const customerDoesExist = await this.customerService.doesExist(store, createCustomerData.email);
             if (customerDoesExist) {
                 throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
             
-            const customer = await this.customerService.createItem({ ...customerCreateParamData, ...customerCreateData });
+            const customer = await this.customerService.createItem(store, createCustomerData);
             
             return { id: customer._id };
         } catch (err) {
@@ -55,8 +57,8 @@ export class CustomerController {
     }
 
     @UseGuards(StoreJwtStrategyGuard)
-    @Get('/customers')
-    async GetCustomerList(@Query() customerListData: GetCustomerListDto, @Request() req) {
+    @Get('/stores/me/customers')
+    async GetMyCustomerList(@Query() customerListData: GetCustomerListDto, @Request() req) {
         try {
             const { id: store } = req.user;
             let { offset, limit } = customerListData;

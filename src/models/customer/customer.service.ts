@@ -3,11 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { GetCustomerListDto } from '../custom-field/dto/get-customer-list.dto';
-import { CustomerCreateDto } from './dto/create-customer.dto';
+import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { UpdateCustomerPasswordDto } from './dto/update-customer-password.dto';
 import { Customer, CustomerDocument } from './schema/customer.schema';
-import { CustomerCreateParamDto } from './dto/create-customer-param.dto';
 
 @Injectable()
 export class CustomerService {
@@ -15,7 +14,7 @@ export class CustomerService {
         @InjectModel(Customer.name) private customerModel: Model<CustomerDocument>,
     ) {}
 
-    createItem({ id: store, name, email, password }: CustomerCreateParamDto & CustomerCreateDto) {
+    createItem(store, { name, email, password }: CreateCustomerDto) {
         const customer = new this.customerModel({ store, name, email, password });
         return customer.save();
     }

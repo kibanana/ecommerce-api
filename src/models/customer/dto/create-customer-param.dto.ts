@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsMongoId } from 'class-validator';
 
-export class CustomerCreateParamDto {
+export class CreateCustomerParamDto {
     @IsNotEmpty()
     @IsMongoId()
     readonly id: string;
