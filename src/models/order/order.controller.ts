@@ -156,4 +156,36 @@ export class OrderController {
             throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @UseGuards(CustomerJwtStrategyGuard)
+    @Get('/customers/me/orders')
+    async GetMyOrderList(@Query() getOrderListData: GetOrderListDto, @Request() req) {
+        try {
+            const { id: customer, store } = req.user;
+            let { offset, limit } = getOrderListData;
+
+            offset = isNaN(offset) ? 0 : offset;
+            limit = isNaN(limit) ? 15 : limit;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const customerDoesExist = await this.customerService.doesExistById(customer);
+            if (!customerDoesExist) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const data = await this.orderService.getListByCustomer(store, customer, { offset, limit } as GetOrderListDto);
+            return data;
+        } catch (err) {
+            console.log(err)
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
