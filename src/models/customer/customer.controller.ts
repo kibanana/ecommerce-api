@@ -9,7 +9,8 @@ import {
     Request,
     UseGuards,
 } from '@nestjs/common';
-import { StoreJwtStrategyGuard } from 'src/auth/guard/store-jwt.guard';
+import { CustomerJwtStrategyGuard } from '../../auth/guard/customer-jwt.guard';
+import { StoreJwtStrategyGuard } from '../../auth/guard/store-jwt.guard';
 import { GetCustomerListDto } from '../custom-field/dto/get-customer-list.dto';
 import { StoreService } from '../store/store.service';
 import { CustomerService } from './customer.service';
@@ -59,6 +60,26 @@ export class CustomerController {
 
             const customers = await this.customerService.getList(store, { offset, limit } as GetCustomerListDto);
             return customers;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(CustomerJwtStrategyGuard)
+    @Get('/me')
+    async GetCustomer(@Request() req) {
+        try {
+            const { id } = req.user;
+
+            const customer = await this.customerService.getItemById(id);
+            if (!customer) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+            return customer;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

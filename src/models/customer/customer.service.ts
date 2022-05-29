@@ -23,6 +23,10 @@ export class CustomerService {
             { skip: offset * limit, limit }
         );
     }
+
+    getItemById(id: string) {
+        return this.customerModel.findById(id, '-password');
+    }
     
     getItem(email: string) {
         return this.customerModel.findOne({ email });
