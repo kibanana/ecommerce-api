@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
+import { GetProductItemDto } from './dto/get-product-item.dto';
 import { GetProductListDto } from './dto/get-product-list.dto';
 import { Product, ProductDocument } from './schema/product.schema';
 
@@ -19,8 +20,12 @@ export class ProductService {
     getList(store, { offset, limit }: GetProductListDto) {
         return this.productModel.find(
             { store },
-            {},
+            { customFields: false },
             { skip: offset * limit, limit }
         );
+    }
+
+    getItem({ id }: GetProductItemDto) {
+        return this.productModel.findById(id);
     }
 }
