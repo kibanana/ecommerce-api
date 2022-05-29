@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { StoreService } from '../../models/store/store.service';
-import { JwtPayload } from '../interface/jwt-payload.interface';
+import { StoreJwtPayload } from '../interface/store-jwt-payload.interface';
 
 @Injectable()
 export class StoreJwtStrategy extends PassportStrategy(Strategy, 'store-jwt') {
@@ -18,7 +18,7 @@ export class StoreJwtStrategy extends PassportStrategy(Strategy, 'store-jwt') {
         });
     }
 
-    async validate(payload: JwtPayload) {
+    async validate(payload: StoreJwtPayload) {
         const { id } = payload;
 
         const doesExist = await this.storeService.doesExistById(id);

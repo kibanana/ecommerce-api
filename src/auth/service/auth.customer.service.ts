@@ -3,7 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CustomerService } from '../../models/customer/customer.service';
-import { JwtPayload } from '../interface/jwt-payload.interface';
+import { CustomerJwtPayload } from '../interface/customer-jwt-payload.interface';
+import { StoreService } from '../../models/store/store.service';
 
 @Injectable()
 export class AuthCustomerService {
@@ -11,21 +12,25 @@ export class AuthCustomerService {
         private configService: ConfigService,
         private jwtService: JwtService,
         private customerService: CustomerService,
+        private storeService: StoreService,
     ) {}
 
-    async validateCustomer(email: string, password: string) {
-        const store = await this.customerService.getItem(email);
+    async validateCustomer(store: string, email: string, password: string) {
+        const doesExist = await this.storeService.doesExistById(store);
+        if (!doesExist) return null;
 
-        if (store && (await bcrypt.compare(password, store.password))) {
-            const { _id: id } = store;
-
-            return { id };
+        const customer = await this.customerService.getItem(store, email);
+        if (customer && (await bcrypt.compare(password, customer.password))) {
+            return {
+                id: customer._id,
+                store: customer.store
+            };
         }
         return null;
     }
 
-    signIn({ id }: JwtPayload) {
-        const payload = { id };
+    signIn({ id, store }: CustomerJwtPayload) {
+        const payload = { id, store };
         const accessToken = this.jwtService.sign(
             payload,
             { issuer: this.configService.get<string>('JWT_ISSUER') }

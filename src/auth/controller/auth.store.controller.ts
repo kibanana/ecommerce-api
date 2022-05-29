@@ -8,7 +8,7 @@ export class AuthStoreController {
 
     @UseGuards(StoreLocalStrategyGuard)
     @Post('/sign-in')
-    SignIn(@Request() req) {
+    StoreSignIn(@Request() req) {
         try {
             return this.authStoreService.signIn(req.user);
         } catch (err) {

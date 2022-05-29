@@ -28,8 +28,8 @@ export class CustomerService {
         return this.customerModel.findById(id, '-password');
     }
     
-    getItem(email: string) {
-        return this.customerModel.findOne({ email });
+    getItem(store: string, email: string) {
+        return this.customerModel.findOne({ store, email });
     }
 
     async doesExistById(id: string) {

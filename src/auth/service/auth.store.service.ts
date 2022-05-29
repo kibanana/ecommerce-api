@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { StoreService } from '../../models/store/store.service';
-import { JwtPayload } from '../interface/jwt-payload.interface';
+import { StoreJwtPayload } from '../interface/store-jwt-payload.interface';
 
 @Injectable()
 export class AuthStoreService {
@@ -24,7 +24,7 @@ export class AuthStoreService {
         return null;
     }
 
-    signIn({ id }: JwtPayload) {
+    signIn({ id }: StoreJwtPayload) {
         const payload = { id };
         const accessToken = this.jwtService.sign(
             payload,

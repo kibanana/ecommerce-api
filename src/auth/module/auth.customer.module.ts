@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { Customer, CustomerSchema } from '../../models/customer/schema/customer.schema';
 import { CustomerModule } from '../../models/customer/customer.module';
+import { StoreModule } from '../../models/store/store.module';
 import { AuthCustomerController } from '../controller/auth.customer.controller';
 import { AuthCustomerService } from '../service/auth.customer.service';
 import { CustomerJwtStrategy } from '../strategy/customer-jwt.strategy';
@@ -24,8 +25,8 @@ import { CustomerLocalStrategy } from '../strategy/customer-local.strategy';
             },
             inject: [ConfigService],
         }),
-        MongooseModule.forFeature([{ name: Customer.name, schema: CustomerSchema }]),
         CustomerModule,
+        StoreModule,
 	],
 	controllers: [AuthCustomerController],
 	providers: [

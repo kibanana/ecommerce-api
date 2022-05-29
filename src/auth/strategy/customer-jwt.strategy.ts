@@ -3,13 +3,15 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { CustomerService } from '../../models/customer/customer.service';
-import { JwtPayload } from '../interface/jwt-payload.interface';
+import { CustomerJwtPayload } from '../interface/customer-jwt-payload.interface';
+import { StoreService } from '../../models/store/store.service';
 
 @Injectable()
 export class CustomerJwtStrategy extends PassportStrategy(Strategy, 'customer-jwt') {
     constructor(
         private configService: ConfigService,
         private customerService: CustomerService,
+        private storeService: StoreService,
     ) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -18,14 +20,19 @@ export class CustomerJwtStrategy extends PassportStrategy(Strategy, 'customer-jw
         });
     }
 
-    async validate(payload: JwtPayload) {
-        const { id } = payload;
+    async validate(payload: CustomerJwtPayload) {
+        const { id, store } = payload;
 
-        const doesExist = await this.customerService.doesExistById(id);
-        if (!doesExist) {
+        const storeDoesExist = await this.storeService.doesExistById(store);
+        if (!storeDoesExist) {
             throw new UnauthorizedException();
         }
 
-        return { id };
+        const customerDoesExist = await this.customerService.doesExistById(id);
+        if (!customerDoesExist) {
+            throw new UnauthorizedException();
+        }
+
+        return { id, store };
     }
 }
