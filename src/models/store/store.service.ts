@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 import { StoreCreateDto } from './dto/store-create.dto';
 import { Store, StoreDocument } from './schema/store.schema';
 import { StoreListDto } from './dto/store-list.dto';
 import { StoreUpdateDto } from './dto/store-update.dto';
+import { StorePasswordUpdateDto } from './dto/store-password-update.dto';
 
 @Injectable()
 export class StoreService {
@@ -33,6 +35,13 @@ export class StoreService {
         return this.storeModel.findOne({ email });
     }
 
+    async comparePassword(id: string, { oldPassword: password }: StorePasswordUpdateDto) {
+        const store = await this.storeModel.findById(id);
+
+        if (store && (await bcrypt.compare(password, store.password))) return true;
+        return false;
+    }
+
     async doesExistByName(name: string) {
         return (await this.storeModel.countDocuments({ name })) > 0;
     }
@@ -43,5 +52,9 @@ export class StoreService {
 
     updateItem(id: string, { name, email }: StoreUpdateDto) {
         return this.storeModel.findByIdAndUpdate(id, { name, email });
+    }
+
+    updateItemPasssword(id: string, { newPassword: password }: StorePasswordUpdateDto) {
+        return this.storeModel.findByIdAndUpdate(id, { password });
     }
 }
