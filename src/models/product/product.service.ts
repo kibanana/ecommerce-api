@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
-import { GetProductItemDto } from './dto/get-product-item.dto';
+import { GetMyProductItemDto } from './dto/get-my-product-item.dto';
 import { GetProductListDto } from './dto/get-product-list.dto';
 import { Product, ProductDocument } from './schema/product.schema';
 
@@ -25,7 +25,7 @@ export class ProductService {
         );
     }
 
-    getItem({ id }: GetProductItemDto) {
+    getItem({ id }: GetMyProductItemDto) {
         return this.productModel.findById(id);
     }
 }
