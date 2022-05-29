@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { GetOrderListDto } from './dto/get-order-list.dto';
 import { Order, OrderDocument } from './schema/order.schema';
-import { GetMyOrderItemDto } from './dto/get-my-order-item.dto';
+import { GetOrderItemDto } from './dto/get-order-item.dto';
 
 @Injectable()
 export class OrderService {
@@ -55,7 +55,7 @@ export class OrderService {
         return { list, count };
     }
 
-    getItem({ id }: GetMyOrderItemDto) {
+    getItem({ id }: GetOrderItemDto) {
         return this.orderModel
             .findById(id)
             .populate({

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsMongoId } from 'class-validator';
 
-export class GetMyOrderItemDto {
+export class GetOrderItemDto {
     @IsNotEmpty()
     @IsMongoId()
     readonly id: string;

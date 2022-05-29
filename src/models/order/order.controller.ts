@@ -19,7 +19,7 @@ import { ProductService } from '../product/product.service';
 import { Product } from '../product/schema/product.schema';
 import { StoreJwtStrategyGuard } from 'src/auth/guard/store-jwt.guard';
 import { GetOrderListDto } from './dto/get-order-list.dto';
-import { GetMyOrderItemDto } from './dto/get-my-order-item.dto';
+import { GetOrderItemDto } from './dto/get-order-item.dto';
 import { GetCustomerOrderListDto } from './dto/get-customer-order-list.dto';
 
 @Controller()
@@ -100,7 +100,7 @@ export class OrderController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Get('/stores/me/orders/:id')
-    async GetMyOrder(@Param() getMyOrderItemData: GetMyOrderItemDto, @Request() req) {
+    async GetMyStoreOrderItem(@Param() getOrderItemData: GetOrderItemDto, @Request() req) {
         try {
             const { id: store } = req.user;
 
@@ -109,7 +109,7 @@ export class OrderController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const order = await this.orderService.getItem(getMyOrderItemData);
+            const order = await this.orderService.getItem(getOrderItemData);
             if (!order) {
                 throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
@@ -148,7 +148,6 @@ export class OrderController {
             const { list, count } = await this.orderService.getListByCustomer(store, id, { offset, limit } as GetOrderListDto);
             return { customer, list, count };
         } catch (err) {
-            console.log(err)
             if (err instanceof HttpException) {
                 throw err;
             }
@@ -180,7 +179,37 @@ export class OrderController {
             const data = await this.orderService.getListByCustomer(store, customer, { offset, limit } as GetOrderListDto);
             return data;
         } catch (err) {
-            console.log(err)
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(CustomerJwtStrategyGuard)
+    @Get('/customers/me/orders/:id')
+    async GetMyOrderItem(@Param() getOrderItemData: GetOrderItemDto, @Query() getOrderListData: GetOrderListDto, @Request() req) {
+        try {
+            const { id: customer, store } = req.user;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const customerDoesExist = await this.customerService.doesExistById(customer);
+            if (!customerDoesExist) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const order = await this.orderService.getItem(getOrderItemData);
+            if (!order) {
+                throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+            
+            return order;
+        } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
