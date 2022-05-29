@@ -23,19 +23,14 @@ export class StoreController {
     constructor(private storeService: StoreService) {}
 
     @Post()
-    async CreateStore(@Body() storeCreateData: CreateStoreDto) {
+    async CreateStore(@Body() createStoreData: CreateStoreDto) {
         try {
-            const doesExistByEmail = await this.storeService.doesExistByEmail(storeCreateData.email);
-            if (doesExistByEmail) {
-                throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
-            }
-            
-            const doesExistByName = await this.storeService.doesExistByName(storeCreateData.name);
-            if (doesExistByName) {
+            const doesExist = await this.storeService.doesExist(createStoreData.email, createStoreData.name);
+            if (doesExist) {
                 throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
 
-            const store = await this.storeService.createItem(storeCreateData);
+            const store = await this.storeService.createItem(createStoreData);
             return { id: store._id };
         } catch (err) {
             if (err instanceof HttpException) {
@@ -47,9 +42,9 @@ export class StoreController {
     }
 
     @Get()
-    async GetStoreList(@Query() storeListData: GetStoreListDto) {
+    async GetStoreList(@Query() getStoreListData: GetStoreListDto) {
         try {
-            let { offset, limit } = storeListData;
+            let { offset, limit } = getStoreListData;
 
             offset = isNaN(offset) ? 0 : offset;
             limit = isNaN(limit) ? 15 : limit;
@@ -77,7 +72,6 @@ export class StoreController {
             }
             return store;
         } catch (err) {
-            console.log(err)
             if (err instanceof HttpException) {
                 throw err;
             }
@@ -88,21 +82,16 @@ export class StoreController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Patch('/me')
-    async UpdateStore(@Body() storeUpdateData: UpdateStoreDto, @Request() req) {
+    async UpdateStore(@Body() updateStoreData: UpdateStoreDto, @Request() req) {
         try {
             const { id: store } = req.user;
 
-            const doesExistByEmail = await this.storeService.doesExistByEmail(storeUpdateData.email);
-            if (doesExistByEmail) {
+            const doesExist = await this.storeService.doesExist(updateStoreData.email, updateStoreData.name);
+            if (doesExist) {
                 throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
 
-            const doesExistByName = await this.storeService.doesExistByName(storeUpdateData.name);
-            if (doesExistByName) {
-                throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
-            }
-
-            const result = await this.storeService.updateItem(store, storeUpdateData);
+            const result = await this.storeService.updateItem(store, updateStoreData);
             if (!result) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
@@ -119,21 +108,21 @@ export class StoreController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Patch('/me/password')
-    async UpdateStorePassword(@Body() storeUpdatePasswordData: UpdateStorePasswordDto, @Request() req) {
+    async UpdateStorePassword(@Body() updateStorePasswordData: UpdateStorePasswordDto, @Request() req) {
         try {
             const { id: store } = req.user;
 
-            const isDuplicated = storeUpdatePasswordData.oldPassword === storeUpdatePasswordData.newPassword;
+            const isDuplicated = updateStorePasswordData.oldPassword === updateStorePasswordData.newPassword;
             if (isDuplicated) {
                 throw new HttpException('ERR_PASSWORD_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
 
-            const isCertified = await this.storeService.comparePassword(store, storeUpdatePasswordData);
+            const isCertified = await this.storeService.comparePassword(store, updateStorePasswordData);
             if (!isCertified) {
                 throw new HttpException('ERR_INVALID_ACCESS', HttpStatus.FORBIDDEN);
             }
 
-            const result = await this.storeService.updateItemPasssword(store, storeUpdatePasswordData);
+            const result = await this.storeService.updateItemPasssword(store, updateStorePasswordData);
             if (!result) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }

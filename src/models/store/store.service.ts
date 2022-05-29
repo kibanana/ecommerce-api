@@ -46,14 +46,10 @@ export class StoreService {
         return !!(await this.storeModel.findById(id));
     }
 
-    async doesExistByName(name: string) {
-        return (await this.storeModel.countDocuments({ name })) > 0;
+    async doesExist(email: string, name: string) {
+        return (await this.storeModel.countDocuments({ $or: [{ email }, { name }] })) > 0;
     }
-
-    async doesExistByEmail(email: string) {
-        return (await this.storeModel.countDocuments({ email })) > 0;
-    }
-
+    
     updateItem(id: string, { name, email }: UpdateStoreDto) {
         return this.storeModel.findByIdAndUpdate(id, { name, email });
     }
