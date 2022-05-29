@@ -4,6 +4,7 @@ import { CustomFieldValue, CustomFieldValueSchema } from '../../common/custom-fi
 import { Store } from '../../store/schema/store.schema';
 import { Customer } from '../../customer/schema/customer.schema';
 import { Product } from '../../product/schema/product.schema';
+import { OrderStatus } from '../order.constant';
 
 export type OrderDocument = Order & mongoose.Document;
 
@@ -12,7 +13,7 @@ export class Order {
     @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Store' })
     store: Store;
 
-    @Prop({ required: true }) // TODO default value
+    @Prop({ required: true, default: OrderStatus.IncompletePayment })
     status: string;
 
     @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })

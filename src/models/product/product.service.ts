@@ -30,6 +30,10 @@ export class ProductService {
         return { list, count };
     }
 
+    getListByIds(ids: string[], store: string) {
+        return this.productModel.find({ _id: { $in: ids }, store });
+    }
+
     getItem({ id }: GetMyProductItemDto) {
         return this.productModel.findById(id);
     }
