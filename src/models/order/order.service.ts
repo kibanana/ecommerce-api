@@ -76,4 +76,8 @@ export class OrderService {
                 select: { name: true, price: true, customFields: true }
             });
     }
+
+    updateItem(id: string, status: string) {
+        return this.orderModel.findByIdAndUpdate(id, { status });
+    }
 }

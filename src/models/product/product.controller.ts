@@ -21,7 +21,7 @@ import { GetProductListParamDto } from './dto/get-product-list-param.dto';
 import { GetMyProductItemDto } from './dto/get-my-product-item.dto';
 import { GetProductItemDto } from './dto/get-product-item.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { UpdateProductParamDto } from './dto/update-product.params.dto';
+import { UpdateProductParamDto } from './dto/update-product.param.dto';
 import { DeleteProductDto } from './dto/delete-product.dto';
 
 @Controller()

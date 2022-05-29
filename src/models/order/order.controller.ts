@@ -5,6 +5,7 @@ import {
     HttpException,
     HttpStatus,
     Param,
+    Patch,
     Post,
     Query,
     Request,
@@ -21,6 +22,8 @@ import { StoreJwtStrategyGuard } from 'src/auth/guard/store-jwt.guard';
 import { GetOrderListDto } from './dto/get-order-list.dto';
 import { GetOrderItemDto } from './dto/get-order-item.dto';
 import { GetCustomerOrderListDto } from './dto/get-customer-order-list.dto';
+import { UpdateCustomerOrderDto } from './dto/update-customer-order.dto';
+import { UpdateOrderParamDto } from './dto/update-order-param.dto';
 
 @Controller()
 export class OrderController {
@@ -209,6 +212,37 @@ export class OrderController {
             }
             
             return order;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(CustomerJwtStrategyGuard)
+    @Patch('/customers/me/orders/:id/stauts')
+    async UpdateCustomerOrder(@Param() updateOrderParamData: UpdateOrderParamDto, @Body() updateCustomerOrderDto: UpdateCustomerOrderDto, @Request() req) {
+        try {
+            const { id: customer, store } = req.user;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const customerDoesExist = await this.customerService.doesExistById(customer);
+            if (customerDoesExist) {
+                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const result = await this.orderService.updateItem(updateOrderParamData.id, updateCustomerOrderDto.status);
+            if (!result) {
+                throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

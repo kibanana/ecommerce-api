@@ -13,3 +13,21 @@ export enum OrderStatus {
     RequestExchange = 'RequestExchange', // 교환요청
     CompleteExchange = 'CompleteExchange', // 교환완료
 }
+
+export const StoreOrderStatus = [
+    OrderStatus.CompletePayment,
+    OrderStatus.CancelPayment,
+    OrderStatus.PrepareDelivery,
+    OrderStatus.InDelivery,
+    OrderStatus.CompleteDelivery,
+    OrderStatus.CompleteCancellation,
+    OrderStatus.CompleteReturn,
+    OrderStatus.CompleteExchange,
+];
+
+export const CustomerOrderStatus = [
+    OrderStatus.ConfirmPurchase,
+    OrderStatus.RequestCancellation,
+    OrderStatus.RequestReturn,
+    OrderStatus.RequestExchange,
+];
