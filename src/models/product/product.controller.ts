@@ -42,6 +42,8 @@ export class ProductController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
+            // TODO custom fields
+
             const product = await this.productService.createItem(store, createProductData);
             
             return { id: product._id };
@@ -116,7 +118,7 @@ export class ProductController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const product = await this.productService.getItem(getMyProductItemData);
+            const product = await this.productService.getItemByStore(store, getMyProductItemData);
             if (!product) {
                 throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
@@ -144,6 +146,8 @@ export class ProductController {
                 throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
+            // TODO customFields
+
             return product;
         } catch (err) {
             if (err instanceof HttpException) {
@@ -165,6 +169,8 @@ export class ProductController {
             if (!storeDoesExist) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
+
+            // TODO customfields
 
             const result = await this.productService.updateItem(id, updateProductData);
             if (!result) {

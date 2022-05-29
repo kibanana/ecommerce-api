@@ -6,6 +6,7 @@ import { GetMyProductItemDto } from './dto/get-my-product-item.dto';
 import { GetProductListDto } from './dto/get-product-list.dto';
 import { Product, ProductDocument } from './schema/product.schema';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { GetProductItemDto } from './dto/get-product-item.dto';
 
 @Injectable()
 export class ProductService {
@@ -36,6 +37,10 @@ export class ProductService {
 
     getItem({ id }: GetMyProductItemDto) {
         return this.productModel.findById(id);
+    }
+
+    getItemByStore(store: string, { id }: GetMyProductItemDto) {
+        return this.productModel.findOne({ id, store });
     }
 
     updateItem(id: string, { name, price, categories, customFields }: UpdateProductDto) {

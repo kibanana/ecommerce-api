@@ -109,7 +109,7 @@ export class OrderController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const order = await this.orderService.getItem(getOrderItemData);
+            const order = await this.orderService.getItemByStore(store, getOrderItemData);
             if (!order) {
                 throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
@@ -140,7 +140,7 @@ export class OrderController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const customer = await this.customerService.getItemById(id);
+            const customer = await this.customerService.getItemById(id, store);
             if (!customer) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
@@ -203,7 +203,7 @@ export class OrderController {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const order = await this.orderService.getItem(getOrderItemData);
+            const order = await this.orderService.getItemByCustomer(customer, getOrderItemData);
             if (!order) {
                 throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }

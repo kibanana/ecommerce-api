@@ -43,6 +43,8 @@ export class CustomerController {
             if (customerDoesExist) {
                 throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
+
+            // TODO custom fields
             
             const customer = await this.customerService.createItem(store, createCustomerData);
             
@@ -88,7 +90,7 @@ export class CustomerController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const customer = await this.customerService.getItemById(id);
+            const customer = await this.customerService.getItemById(id, store);
             if (!customer) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
@@ -118,6 +120,8 @@ export class CustomerController {
                 throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
 
+            // TODO custom fields
+
             const result = await this.customerService.updateItem(id, updateCustomerData);
             if (!result) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -146,7 +150,7 @@ export class CustomerController {
 
             const isDuplicated = updateCustomerPasswordData.oldPassword === updateCustomerPasswordData.newPassword;
             if (isDuplicated) {
-                throw new HttpException('ERR_DUPLICATED_PARAM', HttpStatus.CONFLICT);
+                throw new HttpException('ERR_DUPLICATED_PARAM', HttpStatus.BAD_REQUEST);
             }
 
             const isCertified = await this.customerService.comparePassword(id, updateCustomerPasswordData);

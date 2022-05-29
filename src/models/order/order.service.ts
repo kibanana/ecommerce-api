@@ -55,13 +55,22 @@ export class OrderService {
         return { list, count };
     }
 
-    getItem({ id }: GetOrderItemDto) {
+    getItemByStore(store: string, { id }: GetOrderItemDto) {
         return this.orderModel
-            .findById(id)
+            .findOne({ id, store })
             .populate({
                 path: 'customer',
                 select: { name: true, email: true }
             })
+            .populate({
+                path: 'products',
+                select: { name: true, price: true }
+            });
+    }
+
+    getItemByCustomer(customer: string, { id }: GetOrderItemDto) {
+        return this.orderModel
+            .findOne({ id, customer })
             .populate({
                 path: 'products',
                 select: { name: true, price: true, customFields: true }

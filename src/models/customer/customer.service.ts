@@ -14,7 +14,7 @@ export class CustomerService {
         @InjectModel(Customer.name) private customerModel: Model<CustomerDocument>,
     ) {}
 
-    createItem(store, { name, email, password }: CreateCustomerDto) {
+    createItem(store: string, { name, email, password }: CreateCustomerDto) {
         const customer = new this.customerModel({ store, name, email, password });
         return customer.save();
     }
@@ -26,13 +26,15 @@ export class CustomerService {
             { skip: offset * limit, limit }
         );
 
+        // TODO purchaseCount, productCount, amount
+
         const count = await this.customerModel.countDocuments({ store });
 
         return { list, count };
     }
 
-    getItemById(id: string) {
-        return this.customerModel.findById(id, { password: false });
+    getItemById(id: string, store: string) {
+        return this.customerModel.findOne({ id, store }, { password: false });
     }
     
     getItem(store: string, email: string) {
