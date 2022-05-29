@@ -1,9 +1,11 @@
 import {
     Body,
     Controller,
+    Get,
     HttpException,
     HttpStatus,
     Post,
+    Query,
     Request,
     UseGuards,
 } from '@nestjs/common';
@@ -14,8 +16,10 @@ import { StoreService } from '../store/store.service';
 import { CustomerService } from '../customer/customer.service';
 import { ProductService } from '../product/product.service';
 import { Product } from '../product/schema/product.schema';
+import { StoreJwtStrategyGuard } from 'src/auth/guard/store-jwt.guard';
+import { GetOrderListDto } from './dto/get-order-list.dto';
 
-@Controller('orders')
+@Controller()
 export class OrderController {
     constructor(
         private orderService: OrderService,
@@ -25,7 +29,7 @@ export class OrderController {
     ) {}
 
     @UseGuards(CustomerJwtStrategyGuard)
-    @Post()
+    @Post('/orders')
     async CreateOrder(@Body() createOrderData: CreateOrderDto, @Request() req) {
         try {
             const { id: customer, store } = req.user;
@@ -54,6 +58,32 @@ export class OrderController {
             const order = await this.orderService.createItem(store, customer, createOrderData);
 
             return { id: order._id };
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Get('/stores/me/orders')
+    async GetMyProductList(@Query() getOrderListData: GetOrderListDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            let { offset, limit } = getOrderListData;
+
+            offset = isNaN(offset) ? 0 : offset;
+            limit = isNaN(limit) ? 15 : limit;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            const data = await this.orderService.getList(store, { offset, limit } as GetOrderListDto);
+            return data;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
