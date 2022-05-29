@@ -28,7 +28,7 @@ export class StoreService {
     }
 
     getItemById(id: string) {
-        return this.storeModel.findById(id);
+        return this.storeModel.findById(id, '-password');
     }
 
     getItem(email: string) {

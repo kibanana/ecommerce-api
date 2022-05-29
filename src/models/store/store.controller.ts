@@ -66,6 +66,27 @@ export class StoreController {
     }
 
     @UseGuards(StoreJwtStrategyGuard)
+    @Get('/me')
+    async GetStore(@Request() req) {
+        try {
+            const { id } = req.user;
+
+            const store = await this.storeService.getItemById(id);
+            if (!store) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+            return store;
+        } catch (err) {
+            console.log(err)
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
     @Patch('/me')
     async UpdateStore(@Body() storeUpdateData: UpdateStoreDto, @Request() req) {
         try {
