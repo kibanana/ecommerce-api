@@ -1,6 +1,10 @@
-import { IsString, IsNotEmpty, IsNumber, ValidateNested, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, ValidateNested, IsOptional, IsMongoId } from 'class-validator';
 
 export class CustomField {
+    @IsNotEmpty()
+    @IsMongoId()
+    readonly customField: string;
+
     @IsNotEmpty()
     @IsString()
     readonly name: string;

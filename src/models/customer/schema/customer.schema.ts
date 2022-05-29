@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { CustomFieldValue, CustomFieldValueSchema } from '../../common/custom-field-value.schema';
 import { Store } from '../../store/schema/store.schema';
 
 export type CustomerDocument = Customer & mongoose.Document;
@@ -17,6 +18,9 @@ export class Customer {
 
 	@Prop({ required: true })
 	password: string;
+
+	@Prop({ type: [CustomFieldValueSchema] })
+    customFields: CustomFieldValue[];
 }
 
 export const CustomerSchema = SchemaFactory.createForClass(Customer);

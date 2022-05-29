@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Store } from '../../store/schema/store.schema';
+import { CustomFieldValueSchema, CustomFieldValue } from '../../common/custom-field-value.schema';
 
 export type ProductDocument = Product & mongoose.Document;
 
@@ -18,18 +19,8 @@ export class Product {
     @Prop({ required: true })
     categories: string[];
 
-    @Prop({
-        type: [{
-            name: { type: String },
-            type: { type: String },
-            value: { type: mongoose.Schema.Types.Mixed }
-        }]
-    })
-    customFields: {
-        name: string,
-        type: string,
-        value: mongoose.Schema.Types.Mixed
-    }[];
+    @Prop({ type: [CustomFieldValueSchema] })
+    customFields: CustomFieldValue[];
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
