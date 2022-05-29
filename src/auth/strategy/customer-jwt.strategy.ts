@@ -21,8 +21,8 @@ export class CustomerJwtStrategy extends PassportStrategy(Strategy, 'customer-jw
     async validate(payload: JwtPayload) {
         const { id } = payload;
 
-        const customer = await this.customerService.getItemById(id);
-        if (!customer) {
+        const doesExist = await this.customerService.doesExistById(id);
+        if (!doesExist) {
             throw new UnauthorizedException();
         }
 

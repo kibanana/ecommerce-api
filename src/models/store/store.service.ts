@@ -42,6 +42,10 @@ export class StoreService {
         return false;
     }
 
+    async doesExistById(id: string) {
+        return !!(await this.storeModel.findById(id));
+    }
+
     async doesExistByName(name: string) {
         return (await this.storeModel.countDocuments({ name })) > 0;
     }

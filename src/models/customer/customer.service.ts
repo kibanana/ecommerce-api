@@ -24,12 +24,12 @@ export class CustomerService {
         );
     }
     
-    getItemById(id: string) {
-        return this.customerModel.findById(id);
-    }
-
     getItem(email: string) {
         return this.customerModel.findOne({ email });
+    }
+
+    async doesExistById(id: string) {
+        return !!(await this.customerModel.findById(id));
     }
 
     async doesExist(store: string, email: string) {

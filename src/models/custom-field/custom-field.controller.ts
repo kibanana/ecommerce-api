@@ -19,8 +19,8 @@ export class CustomFieldController {
     @Get('/stores/:id/customers/custom-fields')
     async GetCustomerCustomFieldList(@Param() getCustomFieldListData: GetCustomFieldListDto) {
         try {
-            const store = await this.storeService.getItemById(getCustomFieldListData.id);
-            if (!store) {
+            const doesExist = await this.storeService.doesExistById(getCustomFieldListData.id);
+            if (!doesExist) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
             

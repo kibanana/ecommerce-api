@@ -25,13 +25,13 @@ export class CustomerController {
     @Post()
     async CreateCustomer(@Body() customerCreateData: CustomerCreateDto) {
         try {
-            const store = await this.storeService.getItemById(customerCreateData.store);
-            if (!store) {
+            const storeDoesExist = await this.storeService.doesExistById(customerCreateData.store);
+            if (!storeDoesExist) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const doesExist = await this.customerService.doesExist(customerCreateData.store, customerCreateData.email);
-            if (doesExist) {
+            const customerDoesExist = await this.customerService.doesExist(customerCreateData.store, customerCreateData.email);
+            if (customerDoesExist) {
                 throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
             }
             

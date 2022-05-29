@@ -21,8 +21,8 @@ export class StoreJwtStrategy extends PassportStrategy(Strategy, 'store-jwt') {
     async validate(payload: JwtPayload) {
         const { id } = payload;
 
-        const store = await this.storeService.getItemById(id);
-        if (!store) {
+        const doesExist = await this.storeService.doesExistById(id);
+        if (!doesExist) {
             throw new UnauthorizedException();
         }
 
