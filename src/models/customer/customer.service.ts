@@ -19,12 +19,16 @@ export class CustomerService {
         return customer.save();
     }
 
-    getList(store: string, { offset, limit }: GetCustomerListDto) {
-        return this.customerModel.find(
+    async getList(store: string, { offset, limit }: GetCustomerListDto) {
+        const list = await this.customerModel.find(
             { store },
             { store: false, password: false, customFields: false },
             { skip: offset * limit, limit }
         );
+
+        const count = await this.customerModel.countDocuments({ store });
+
+        return { list, count };
     }
 
     getItemById(id: string) {

@@ -18,12 +18,16 @@ export class ProductService {
         return product.save();
     }
 
-    getList(store: string, { offset, limit }: GetProductListDto) {
-        return this.productModel.find(
+    async getList(store: string, { offset, limit }: GetProductListDto) {
+        const list = await this.productModel.find(
             { store },
             { customFields: false },
             { skip: offset * limit, limit }
         );
+
+        const count = await this.productModel.countDocuments({ store });
+
+        return { list, count };
     }
 
     getItem({ id }: GetMyProductItemDto) {

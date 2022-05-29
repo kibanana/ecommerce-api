@@ -49,8 +49,8 @@ export class StoreController {
             offset = isNaN(offset) ? 0 : offset;
             limit = isNaN(limit) ? 15 : limit;
 
-            const stores = await this.storeService.getList({ offset, limit } as GetStoreListDto);
-            return stores;
+            const data = await this.storeService.getList({ offset, limit } as GetStoreListDto);
+            return data;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

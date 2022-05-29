@@ -66,8 +66,8 @@ export class CustomerController {
             offset = isNaN(offset) ? 0 : offset;
             limit = isNaN(limit) ? 15 : limit;
 
-            const customers = await this.customerService.getList(store, { offset, limit } as GetCustomerListDto);
-            return customers;
+            const data = await this.customerService.getList(store, { offset, limit } as GetCustomerListDto);
+            return data;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

@@ -19,12 +19,16 @@ export class StoreService {
         return store.save();
     }
 
-    getList({ offset, limit }: GetStoreListDto) {
-        return this.storeModel.find(
+    async getList({ offset, limit }: GetStoreListDto) {
+        const list = await this.storeModel.find(
             {},
             { password: false },
             { skip: offset * limit, limit }
         );
+
+        const count = await this.storeModel.countDocuments();
+
+        return { list, count };
     }
 
     getItemById(id: string) {

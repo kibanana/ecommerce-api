@@ -69,8 +69,8 @@ export class ProductController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const products = await this.productService.getList(store, { offset, limit } as GetProductListDto);
-            return products;
+            const data = await this.productService.getList(store, { offset, limit } as GetProductListDto);
+            return data;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -94,8 +94,8 @@ export class ProductController {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
 
-            const products = await this.productService.getList(store, { offset, limit } as GetProductListDto);
-            return products;
+            const data = await this.productService.getList(store, { offset, limit } as GetProductListDto);
+            return data;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
