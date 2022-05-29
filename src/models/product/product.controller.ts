@@ -4,6 +4,7 @@ import {
     Get,
     HttpException,
     HttpStatus,
+    Param,
     Post,
     Query,
     Request,
@@ -14,6 +15,7 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { GetProductListDto } from './dto/get-product-list.dto';
 import { StoreJwtStrategyGuard } from '../../auth/guard/store-jwt.guard';
+import { GetProductListParamDto } from './dto/get-product-list-param.dto';
 
 @Controller()
 export class ProductController {
@@ -47,10 +49,30 @@ export class ProductController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Get('/stores/me/products')
-    async GetProductList(@Query() productListData: GetProductListDto, @Request() req) {
+    async GetMyProductList(@Query() getProductListData: GetProductListDto, @Request() req) {
         try {
             const { id: store } = req.user;
-            let { offset, limit } = productListData;
+            let { offset, limit } = getProductListData;
+
+            offset = isNaN(offset) ? 0 : offset;
+            limit = isNaN(limit) ? 15 : limit;
+
+            const products = await this.productService.getList(store, { offset, limit } as GetProductListDto);
+            return products;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Get('/stores/:id/products')
+    async GetProductList(@Param() productListParamData: GetProductListParamDto, @Query() getProductListData: GetProductListDto) {
+        try {
+            const { id: store } = productListParamData;
+            let { offset, limit } = getProductListData;
 
             offset = isNaN(offset) ? 0 : offset;
             limit = isNaN(limit) ? 15 : limit;
