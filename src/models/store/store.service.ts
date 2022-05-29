@@ -57,4 +57,8 @@ export class StoreService {
     updateItemPasssword(id: string, { newPassword: password }: StorePasswordUpdateDto) {
         return this.storeModel.findByIdAndUpdate(id, { password });
     }
+
+    deleteItem(id: string) {
+        return this.storeModel.findByIdAndDelete(id);
+    }
 }

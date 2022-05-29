@@ -126,4 +126,25 @@ export class StoreController {
             throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Delete('/me')
+    async DeleteStore(@Request() req) {
+        try {
+            const { id: store } = req.user;
+
+            const result = await this.storeService.deleteItem(store);
+            if (!result) {
+                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+            }
+
+            return;
+        } catch (err) {
+            if (err instanceof HttpException) {
+                throw err;
+            }
+            
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
