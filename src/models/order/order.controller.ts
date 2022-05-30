@@ -67,7 +67,7 @@ export class OrderController {
             }
 
             if (createOrderData.customFields) {
-                const validationResult = this.customFieldService.validate(store, CustomFieldTarget.ORDER, createOrderData.customFields);
+                const validationResult = await this.customFieldService.validate(store, CustomFieldTarget.ORDER, createOrderData.customFields);
                 if (!validationResult) {
                     throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }

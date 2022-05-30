@@ -51,7 +51,7 @@ export class CustomerController {
             }
             
             if (createCustomerData.customFields) {
-                const validationResult = this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, createCustomerData.customFields);
+                const validationResult = await this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, createCustomerData.customFields);
                 if (!validationResult) {
                     throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }
@@ -116,7 +116,7 @@ export class CustomerController {
             }
 
             if (updateCustomerData.customFields) {
-                const validationResult = this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, updateCustomerData.customFields);
+                const validationResult = await this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, updateCustomerData.customFields);
                 if (!validationResult) {
                     throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }
@@ -171,7 +171,7 @@ export class CustomerController {
             }
 
             if (updateCustomerData.customFields) {
-                const validationResult = this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, updateCustomerData.customFields, true);
+                const validationResult = await this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, updateCustomerData.customFields, true);
                 if (!validationResult) {
                     throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }
