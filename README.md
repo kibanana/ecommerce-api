@@ -46,7 +46,7 @@ API 서버는 `http://localhost:3000/api/v1` 에서 실행됩니다.
 |name|String|사용자 정의 필드 이름|
 |type|String|사용자 정의 필드 타입 (enum CustomFieldType)|
 |value|Any|사용자 정의 필드 값|
-|isOnlyStoreWritable|Boolean|사용자 정의 필드 수정 권한 여부 (예시)적립금|
+|isOnlyStoreWritable|Boolean|사용자 정의 필드 수정 권한 여부 (예시: 적립금)|
 
 ```typescript
 export enum CustomFieldType {
@@ -127,7 +127,7 @@ export enum OrderStatus {
 |type|String|사용자 정의 필드 타입 (enum CustomFieldType)|
 |subType|String[]|사용자 정의 필드 타입이 `Select`인 경우 선택할 수 있는 선택지 목록|
 |isRequired|Boolean|사용자 정의 필드 필수 입력 여부|
-|isOnlyStoreWritable|Boolean|사용자 정의 필드 수정 권한 여부 (예시)적립금|
+|isOnlyStoreWritable|Boolean|사용자 정의 필드 수정 권한 여부 (예시: 적립금)|
 
 ```typescript
 export enum CustomFieldTarget {
@@ -151,3 +151,84 @@ export enum CustomFieldType {
 - 사용자 정의 필드 정보(name, type, subType 등)가 변경되는 경우에 대비하기 위해 `customfields` 컬렉션의 도큐먼트를 조회할 필요 없이, `customers`, `products`, `orders` 컬렉션의 도큐먼트만 조회해도 사용자 정의 필드 값 데이터를 응답할 수 있게 구성하였습니다.
 
 ## API 문서
+
+### 인증
+- Store JWT 인증
+- Customer JWT 인증
+
+### 에러코드
+- `200` (OK)
+- `400` (Bad Request)
+- `401` (Unauthorized)
+- `404` (Not Found)
+- `409` (Conflict)
+- `500` (Internal Server Error) - 공통 에러 처리
+
+### 응답
+- `200`
+
+    ```json
+    {
+        "isSuccess": true,
+        "data": {data},
+        "time": {unix-time}
+    }
+    ```
+
+-  `400`, `401`, `404`, `409`, `500`
+
+    ```json
+    {
+        "isSuccess": false,
+        "errorCode": {error-code},
+        "time": {unix-time}
+    }
+    ```
+
+### `/auth`
+- POST /auth/stores/sign-in
+- POST /auth/stores/:id/customers/sign-in
+
+### `/stores`
+- POST /stores
+- GET /stores
+- GET /stores/me
+- PATCH /stores/me
+- PATCH /stores/me/password
+- DELETE /stores/me
+
+### `/customers`
+- POST /stores/:id/customers
+- GET /stores/me/customers
+- GET /stores/me/customers/:id
+- PATCH /stores/me/customers/:id
+- GET /customers/me
+- PATCH /customers/me
+- PATCH /customers/me/password
+- DELETE /customers/me
+
+### `/products`
+- POST /stores/me/products
+- GET /stores/me/products
+- GET /stores/:id/products
+- GET /stores/me/products/:id
+- GET /stores/:storeid/products/:id
+- PATCH /stores/me/products/:id
+- DELETE /stores/me/products/:id
+
+### `/orders`
+- POST /orders
+- GET /stores/me/orders
+- GET /stores/me/orders/:id
+- GET /stores/me/customers/:id/orders
+- GET /customers/me/orders
+- GET /customers/me/orders/:id
+- PATCH /customers/me/orders/:id/stauts
+- PATCH /stores/me/orders/:id/stauts
+
+### `/custom-fields`
+- POST /stores/me/custom-fields
+- GET /stores/me/custom-fields
+- PATCH /stores/me/custom-fields/:id
+- DELETE /stores/me/custom-fields/:id
+- GET /stores/:id/custom-fields
