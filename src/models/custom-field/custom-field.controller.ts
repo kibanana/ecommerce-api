@@ -5,6 +5,7 @@ import {
     HttpException,
     HttpStatus,
     Param,
+    Patch,
     Post,
     Query,
     Request,
@@ -19,6 +20,8 @@ import { GetMyCustomFieldListQueryDto } from './dto/get-my-custom-filed-list-que
 import { GetCustomFieldListQueryDto } from './dto/get-custom-filed-list-query.dto';
 import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
 import { CustomFieldType, CustomFieldSubType } from './custom-field.constants';
+import { UpdateCustomFieldParamDto } from './dto/update-custom-field-param.dto';
+import { UpdateCustomFieldDto } from './dto/update-custom-field.dto';
 
 @Controller()
 export class CustomFieldController {
@@ -26,28 +29,9 @@ export class CustomFieldController {
         private customFieldService: CustomFieldService,
         private storeService: StoreService,
     ) {}
-
-    @Get('/stores/:id/custom-fields')
-    async GetCustomFieldList(@Query() getCustomFieldListQueryData: GetCustomFieldListQueryDto, @Param() getCustomFieldListData: GetCustomFieldListDto) {
-        try {
-            const { id: store } = getCustomFieldListData;
-
-            const doesExist = await this.storeService.doesExistById(store);
-            if (!doesExist) {
-                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
-            }
-            
-            const customFields = await this.customFieldService.getList(store, getCustomFieldListQueryData);
-            return customFields;
-        } catch (err) {
-            if (err instanceof HttpException) throw err;
-            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @UseGuards(StoreJwtStrategyGuard)
     @Post('/stores/me/custom-fields')
-    async CreateProduct(@Body() createCustomFieldData: CreateCustomFieldDto, @Request() req) {
+    async CreateCustomField(@Body() createCustomFieldData: CreateCustomFieldDto, @Request() req) {
         try {
             const { id: store } = req.user;
             const { type, subType } = createCustomFieldData;
@@ -79,10 +63,7 @@ export class CustomFieldController {
             
             return { id: customField._id };
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -99,6 +80,65 @@ export class CustomFieldController {
             }
             
             const customFields = await this.customFieldService.getList(store, getMyCustomFieldListQueryData);
+            return customFields;
+        } catch (err) {
+            if (err instanceof HttpException) throw err;
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Patch('/stores/me/custom-fields/:id')
+    async UpdateCustomField(@Param() updateCustomFieldParamData: UpdateCustomFieldParamDto, @Body() updateCustomFieldData: UpdateCustomFieldDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            const { id } = updateCustomFieldParamData;
+            const { type, subType } = updateCustomFieldData;
+
+            if (
+                (
+                    type === CustomFieldType.SELECT &&
+                    (
+                        !Array.isArray(subType) ||
+                        subType.length <= 0 ||
+                        typeof subType[0] !== 'string'
+                    )
+                )
+                ||
+                (
+                    type === CustomFieldType.INPUT &&
+                    !Object.values(CustomFieldSubType).includes(subType)
+                )
+            ) {
+                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+            }
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+
+            const result = await this.customFieldService.updateItem(id, store, updateCustomFieldData);
+            if (!result) {
+                throw new HttpException(ErrorCode.ERR_CUSTOM_FIELD_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+        } catch (err) {
+            if (err instanceof HttpException) throw err;
+            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Get('/stores/:id/custom-fields')
+    async GetCustomFieldList(@Query() getCustomFieldListQueryData: GetCustomFieldListQueryDto, @Param() getCustomFieldListData: GetCustomFieldListDto) {
+        try {
+            const { id: store } = getCustomFieldListData;
+
+            const doesExist = await this.storeService.doesExistById(store);
+            if (!doesExist) {
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+            
+            const customFields = await this.customFieldService.getList(store, getCustomFieldListQueryData);
             return customFields;
         } catch (err) {
             if (err instanceof HttpException) throw err;

@@ -5,6 +5,7 @@ import { GetCustomFieldListQueryDto } from './dto/get-custom-filed-list-query.dt
 import { CustomField, CustomFieldDocument } from './schema/custom-field.schema';
 import { CustomFieldTarget } from './custom-field.constants';
 import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
+import { UpdateCustomFieldDto } from './dto/update-custom-field.dto';
 
 @Injectable()
 export class CustomFieldService {
@@ -39,5 +40,12 @@ export class CustomFieldService {
             store,
             target: CustomFieldTarget.PRODUCT,
         });
+    }
+
+    updateItem(id: string, store: string, { name, type, subType, isRequired, isOnlyStoreWritable }: UpdateCustomFieldDto) {
+        return this.customFieldModel.findOneAndUpdate(
+            { id, store },
+            { name, type, subType, isRequired, isOnlyStoreWritable }
+        );
     }
 }
