@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsMongoId, IsBoolean, IsOptional } from 'class-validator';
 
-export class CustomField {
+export class CustomFieldDto {
     @IsNotEmpty()
     @IsMongoId()
     readonly customField: string;

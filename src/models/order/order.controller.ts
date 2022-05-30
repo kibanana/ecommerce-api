@@ -67,44 +67,9 @@ export class OrderController {
             }
 
             if (createOrderData.customFields) {
-                const customFieldValues = createOrderData.customFields
-                const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.ORDER });
-    
-                const customFieldMap = new Map();
-                for (let i = 0; i < customFieldValues.length; i++) {
-                    customFieldMap.set(customFieldValues[i].customField, customFieldValues[i]);
-                }
-
-                for (let i = 0; i < customFields.length; i++) {
-                    const customField = customFields[i];
-                    const customFieldValue = customFieldMap.get(String(customField._id));
-
-                    if (!customFieldValue && customField.isRequired === true) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-                    else if (!customFieldValue) continue;
-
-                    if (
-                        customField.name !== customFieldValue.name ||
-                        (
-                            customField.type === CustomFieldType.INPUT &&
-                            typeof customFieldValue.value !== 'string'
-                        ) ||
-                        (
-                            customField.type === CustomFieldType.SELECT &&
-                            !Array.isArray(customFieldValue.value)
-                        )
-                    ) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-    
-                    if (customField.type === CustomFieldType.SELECT) {
-                        customFieldValue.value.forEach((elem: string) => {
-                            if (customField.subType.indexOf(elem) === -1) {
-                                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                            }
-                        });
-                    }
+                const validationResult = await this.customFieldService.validate(store, CustomFieldTarget.ORDER, createOrderData.customFields);
+                if (!validationResult) {
+                    throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }
             }
 
