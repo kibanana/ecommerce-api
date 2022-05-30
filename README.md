@@ -12,18 +12,20 @@ $ npm install
 
 ## 준비
 
-프로젝트 디렉터리 최상위에 `.env` 파일을 생성합니다.
+1. 프로젝트 디렉터리 최상위에 `.env` 파일을 생성합니다.
 
-예시)
+    예시)
 
-```
-DB_URL=mongodb://localhost/ecommerce
-JWT_ISSUER=ecommerce
-JWT_STORE_SECRET=#H?G+bm3Z-Z=JHLMSsVSQVr6u#%7S@y9
-JWT_STORE_EXPIRES_IN=24h
-JWT_CUSTOMER_SECRET=#ZLK&9Jx8vrZ_B8aCcC-kBVC8TpaUeB6
-JWT_CUSTOMER_EXPIRES_IN=24h
-```
+    ```
+    DB_URL=mongodb://localhost/ecommerce
+    JWT_ISSUER=ecommerce
+    JWT_STORE_SECRET=#H?G+bm3Z-Z=JHLMSsVSQVr6u#%7S@y9
+    JWT_STORE_EXPIRES_IN=24h
+    JWT_CUSTOMER_SECRET=#ZLK&9Jx8vrZ_B8aCcC-kBVC8TpaUeB6
+    JWT_CUSTOMER_EXPIRES_IN=24h
+    ```
+2. 프로젝트 디렉터리 최상위에 위치한 `E-commerce API.postman_collection.json` 파일을 다운로드하여 Postman에 Import 합니다.
+3. Postman에 `local` 환경변수를 생성하고 값을 `localhost:3000/api/v1`로 지정합니다.
 
 ## 실행
 
@@ -150,7 +152,7 @@ export enum CustomFieldType {
 - 사용자 정의 필드에 대해 입력된 값은 각 `customers`, `products`, `orders` 컬렉션에 서브도큐먼트 배열 형태로 저장합니다.
 - 사용자 정의 필드 정보(name, type, subType 등)가 변경되는 경우에 대비하기 위해 `customfields` 컬렉션의 도큐먼트를 조회할 필요 없이, `customers`, `products`, `orders` 컬렉션의 도큐먼트만 조회해도 사용자 정의 필드 값 데이터를 응답할 수 있게 구성하였습니다.
 
-## API 문서
+## API 설계
 
 ### 인증
 - Store JWT 인증
@@ -160,6 +162,7 @@ export enum CustomFieldType {
 - `200` (OK)
 - `400` (Bad Request)
 - `401` (Unauthorized)
+- `403` (Forbidden)
 - `404` (Not Found)
 - `409` (Conflict)
 - `500` (Internal Server Error) - 공통 에러 처리
@@ -175,7 +178,7 @@ export enum CustomFieldType {
     }
     ```
 
--  `400`, `401`, `404`, `409`, `500`
+-  `400`, `401`, `403`, `404`, `409`, `500`
 
     ```json
     {
