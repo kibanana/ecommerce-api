@@ -63,7 +63,7 @@ export class OrderController {
                 throw new HttpException(ErrorCode.ERR_FORGERY_DATA, HttpStatus.CONFLICT);
             }
 
-            // TODO custom fields
+            // TODO customfields
 
             const order = await this.orderService.createItem(store, customer, createOrderData);
 

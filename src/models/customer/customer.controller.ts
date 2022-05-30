@@ -45,7 +45,7 @@ export class CustomerController {
                 throw new HttpException(ErrorCode.ERR_CUSTOMER_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
-            // TODO custom fields
+            // TODO customfields
             
             const customer = await this.customerService.createItem(store, createCustomerData);
             
@@ -112,7 +112,7 @@ export class CustomerController {
                 throw new HttpException(ErrorCode.ERR_CUSTOMER_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
-            // TODO custom fields
+            // TODO customfields
 
             const result = await this.customerService.updateItem(id, updateCustomerData);
             if (!result) {

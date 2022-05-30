@@ -14,6 +14,8 @@ export class CreateCustomerDto {
     @IsString()
     readonly password: string;
 
+    // TODO customfields
+
     constructor(name: string, email: string, password: string) {
         this.name = name;
         this.email = email;

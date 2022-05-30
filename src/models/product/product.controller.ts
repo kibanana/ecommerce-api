@@ -43,7 +43,7 @@ export class ProductController {
                 throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
-            // TODO custom fields
+            // TODO customfields
 
             const product = await this.productService.createItem(store, createProductData);
             
@@ -134,8 +134,6 @@ export class ProductController {
             if (!product) {
                 throw new HttpException(ErrorCode.ERR_PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
-
-            // TODO customFields
 
             return product;
         } catch (err) {

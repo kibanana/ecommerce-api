@@ -9,6 +9,8 @@ export class UpdateCustomerDto {
     @IsString()
     @IsEmail()
     readonly email: string;
+    
+    // TODO customfields
 
     constructor(name: string, email: string) {
         this.name = name;

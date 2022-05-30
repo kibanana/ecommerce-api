@@ -20,6 +20,8 @@ export class UpdateProductDto {
     @Type(() => CustomField)
     readonly customFields: CustomField[];
 
+    // TODO customfields
+
     constructor(name: string, price: number, categories: string[], customFields: CustomField[]) {
         this.name = name;
         this.price = price;
