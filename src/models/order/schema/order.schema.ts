@@ -13,7 +13,7 @@ export class Order {
     @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Store' })
     store: Store;
 
-    @Prop({ required: true, default: OrderStatus.IncompletePayment })
+    @Prop({ required: true, default: OrderStatus.INCOMPLETE_PAYMENT })
     status: string;
 
     @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Customer' })

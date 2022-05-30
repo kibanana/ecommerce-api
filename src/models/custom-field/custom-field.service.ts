@@ -14,21 +14,21 @@ export class CustomFieldService {
     getCustomerList(store: string) {
         return this.customFieldModel.find({
             store,
-            target: CustomFieldTarget.Customer,
+            target: CustomFieldTarget.CUSTOMER,
         });
     }
 
     getOrderList(store: string) {
         return this.customFieldModel.find({
             store,
-            target: CustomFieldTarget.Order,
+            target: CustomFieldTarget.ORDER,
         });
     }
 
     getProductList(store: string) {
         return this.customFieldModel.find({
             store,
-            target: CustomFieldTarget.Product,
+            target: CustomFieldTarget.PRODUCT,
         });
     }
 }

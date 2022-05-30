@@ -1,5 +1,5 @@
 export enum CustomFieldTarget {
-    Customer = 'Customer',
-    Product = 'Product',
-    Order = 'Order',
+    CUSTOMER = 'Customer',
+    PRODUCT = 'Product',
+    ORDER = 'Order',
 }
