@@ -12,7 +12,7 @@ export class CustomField {
 	@Prop({ required: true })
 	target: string;
 
-	@Prop({ required: true, unique: true })
+	@Prop({ required: true })
 	name: string;
 
 	@Prop({ required: true })
@@ -23,6 +23,9 @@ export class CustomField {
 
 	@Prop({ required: true })
 	isRequired: boolean;
+
+	@Prop({ default: false })
+	isOnlyStoreWritable: boolean;
 }
 
 export const CustomFieldSchema = SchemaFactory.createForClass(CustomField);

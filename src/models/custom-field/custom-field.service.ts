@@ -4,12 +4,17 @@ import { Model } from 'mongoose';
 import { GetCustomFieldListQueryDto } from './dto/get-custom-filed-list-query.dto';
 import { CustomField, CustomFieldDocument } from './schema/custom-field.schema';
 import { CustomFieldTarget } from './custom-field.constants';
+import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
 
 @Injectable()
 export class CustomFieldService {
     constructor(
         @InjectModel(CustomField.name) private customFieldModel: Model<CustomFieldDocument>,
     ) {}
+
+    createItem(store: string, { target, name, type, subType, isRequired, isOnlyStoreWritable }: CreateCustomFieldDto) {
+        return this.customFieldModel.create({ store, target, name, type, subType, isRequired, isOnlyStoreWritable });
+    }
 
     getList(store: string, { target }: GetCustomFieldListQueryDto) {
         return this.customFieldModel.find({ store, target });

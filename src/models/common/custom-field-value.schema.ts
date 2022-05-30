@@ -16,6 +16,9 @@ export class CustomFieldValue {
 
     @Prop({ required: true, type: mongoose.Schema.Types.Mixed })
     value:  mongoose.Schema.Types.Mixed;
+
+    @Prop({ default: false })
+    isOnlyStoreWritable: boolean;
 }
 
 export const CustomFieldValueSchema = SchemaFactory.createForClass(CustomFieldValue);
