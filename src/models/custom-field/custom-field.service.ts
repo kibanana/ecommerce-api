@@ -1,0 +1,37 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { GetCustomFieldListQueryDto } from './dto/get-custom-filed-list-query.dto';
+import { CustomField, CustomFieldDocument } from './schema/custom-field.schema';
+import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
+import { UpdateCustomFieldDto } from './dto/update-custom-field.dto';
+
+@Injectable()
+export class CustomFieldService {
+    constructor(
+        @InjectModel(CustomField.name) private customFieldModel: Model<CustomFieldDocument>,
+    ) {}
+
+    createItem(store: string, { target, name, type, subType, isRequired, isOnlyStoreWritable }: CreateCustomFieldDto) {
+        return this.customFieldModel.create({ store, target, name, type, subType, isRequired, isOnlyStoreWritable });
+    }
+
+    getList(store: string, { target }: GetCustomFieldListQueryDto) {
+        return this.customFieldModel.find({ store, target });
+    }
+
+    getListByIds(ids: string[], store: string) {
+        return this.customFieldModel.find({ _id: { $in: ids }, store });
+    }
+    
+    updateItem(id: string, { name, type, subType, isRequired, isOnlyStoreWritable }: UpdateCustomFieldDto) {
+        return this.customFieldModel.findByIdAndUpdate(
+            id,
+            { name, type, subType, isRequired, isOnlyStoreWritable }
+        );
+    }
+
+    deleteItem(id: string) {
+        return this.customFieldModel.findByIdAndDelete(id);
+    }
+}
