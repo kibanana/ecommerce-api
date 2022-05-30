@@ -49,10 +49,7 @@ export class ProductController {
             
             return { id: product._id };
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -75,10 +72,7 @@ export class ProductController {
             const data = await this.productService.getList(store, { offset, limit } as GetProductListDto);
             return data;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -100,10 +94,7 @@ export class ProductController {
             const data = await this.productService.getList(store, { offset, limit } as GetProductListDto);
             return data;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -126,10 +117,7 @@ export class ProductController {
 
             return product;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -151,10 +139,7 @@ export class ProductController {
 
             return product;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -178,10 +163,7 @@ export class ProductController {
                 throw new HttpException(ErrorCode.ERR_PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -203,10 +185,7 @@ export class ProductController {
                 throw new HttpException(ErrorCode.ERR_PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

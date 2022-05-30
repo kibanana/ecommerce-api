@@ -35,10 +35,7 @@ export class CustomFieldController {
             const customFields = await this.customFieldService.getCustomerList(store);
             return customFields;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -57,10 +54,7 @@ export class CustomFieldController {
             const customFields = await this.customFieldService.getOrderList(store);
             return customFields;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -79,10 +73,7 @@ export class CustomFieldController {
             const customFields = await this.customFieldService.getProductList(store);
             return customFields;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

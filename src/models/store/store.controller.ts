@@ -34,10 +34,7 @@ export class StoreController {
             const store = await this.storeService.createItem(createStoreData);
             return { id: store._id };
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -53,10 +50,7 @@ export class StoreController {
             const data = await this.storeService.getList({ offset, limit } as GetStoreListDto);
             return data;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -74,10 +68,7 @@ export class StoreController {
             
             return store;
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -98,10 +89,7 @@ export class StoreController {
                 throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -127,10 +115,7 @@ export class StoreController {
                 throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -146,10 +131,7 @@ export class StoreController {
                 throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

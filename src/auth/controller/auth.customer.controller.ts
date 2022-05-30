@@ -14,10 +14,7 @@ export class AuthCustomerController {
         try {
             return this.authCustomerService.signIn(req.user);
         } catch (err) {
-            if (err instanceof HttpException) {
-                throw err;
-            }
-            
+            if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
