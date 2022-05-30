@@ -2,7 +2,6 @@
 	"info": {
 		"_postman_id": "8550d381-8022-487d-a707-e5ebeef66446",
 		"name": "E-commerce API",
-		"description": "# 소개\n식스샵 사전과제\n\n# 인증\n- store jwt (/stores/me)\n- customer jwt (/customers/me)\n\n# 에러코드\n- 200 (OK)\n- 400 (Bad Request)\n- 401 (Unauthorized)\n- 404 (Not Found)\n- 409 (Conflict)\n- 500 (Internal Server Error)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -978,7 +977,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTM0ZjI3M2QxMjRjMGM4MWFhZDE0MSIsImlhdCI6MTY1MzkwODk3OSwiZXhwIjoxNjUzOTk1Mzc5LCJpc3MiOiJzaXhzaG9wLmNvbSJ9.xlHDDQUR7vHy2Et84U64O10rYVLCMytSqPgkrq8UkHQ",
+				"value": "",
 				"type": "string"
 			}
 		]
