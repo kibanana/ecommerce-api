@@ -242,8 +242,6 @@ export class OrderController {
             if (!result) {
                 throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -268,8 +266,6 @@ export class OrderController {
             if (!result) {
                 throw new HttpException('ERR_ORDER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

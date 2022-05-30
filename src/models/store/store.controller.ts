@@ -70,6 +70,7 @@ export class StoreController {
             if (!store) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
+            
             return store;
         } catch (err) {
             if (err instanceof HttpException) {
@@ -95,8 +96,6 @@ export class StoreController {
             if (!result) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -126,8 +125,6 @@ export class StoreController {
             if (!result) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -147,8 +144,6 @@ export class StoreController {
             if (!result) {
                 throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

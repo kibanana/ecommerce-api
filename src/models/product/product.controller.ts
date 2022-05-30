@@ -21,7 +21,7 @@ import { GetProductListParamDto } from './dto/get-product-list-param.dto';
 import { GetMyProductItemDto } from './dto/get-my-product-item.dto';
 import { GetProductItemDto } from './dto/get-product-item.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { UpdateProductParamDto } from './dto/update-product.param.dto';
+import { UpdateProductParamDto } from './dto/update-product-param.dto';
 import { DeleteProductDto } from './dto/delete-product.dto';
 
 @Controller()
@@ -176,8 +176,6 @@ export class ProductController {
             if (!result) {
                 throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-            
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -203,8 +201,6 @@ export class ProductController {
             if (!result) {
                 throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-            
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;

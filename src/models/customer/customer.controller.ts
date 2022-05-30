@@ -126,8 +126,6 @@ export class CustomerController {
             if (!result) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -162,8 +160,6 @@ export class CustomerController {
             if (!result) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
@@ -188,8 +184,6 @@ export class CustomerController {
             if (!result) {
                 throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
             }
-
-            return;
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
