@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { CustomerJwtStrategyGuard } from '../../auth/guard/customer-jwt.guard';
 import { StoreJwtStrategyGuard } from '../../auth/guard/store-jwt.guard';
-import { GetCustomerListDto } from '../custom-field/dto/get-customer-list.dto';
+import { GetCustomerListDto } from './dto/get-customer-list.dto';
 import { StoreService } from '../store/store.service';
 import { CustomerService } from './customer.service';
 import { CreateCustomerParamDto } from './dto/create-customer-param.dto';

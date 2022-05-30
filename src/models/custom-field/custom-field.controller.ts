@@ -5,6 +5,7 @@ import {
     HttpStatus,
     Param,
     Post,
+    Query,
     Request,
     UseGuards,
 } from '@nestjs/common';
@@ -12,8 +13,8 @@ import { StoreService } from '../store/store.service';
 import { CustomFieldService } from './custom-field.service';
 import { GetCustomFieldListDto } from './dto/get-custom-field-list.dto';
 import { StoreJwtStrategyGuard } from '../../auth/guard/store-jwt.guard';
-import { CustomerJwtStrategyGuard } from '../../auth/guard/customer-jwt.guard';
 import { ErrorCode } from '../../common/constants/errorCode';
+import { GetMyCustomFieldListQueryDto } from './dto/get-my-custom-filed-list-query.dto';
 
 @Controller()
 export class CustomFieldController {
@@ -61,7 +62,7 @@ export class CustomFieldController {
 
     @UseGuards(StoreJwtStrategyGuard)
     @Get('/stores/me/custom-fields')
-    async GetMyProductCustomFieldList(@Request() req) {
+    async GetMyCustomFieldList(@Query() getMyCustomFieldListQueryData: GetMyCustomFieldListQueryDto, @Request() req) {
         try {
             const { id: store } = req.user;
 
@@ -70,7 +71,7 @@ export class CustomFieldController {
                 throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             
-            const customFields = await this.customFieldService.getProductList(store);
+            const customFields = await this.customFieldService.getList(store, getMyCustomFieldListQueryData);
             return customFields;
         } catch (err) {
             if (err instanceof HttpException) throw err;
