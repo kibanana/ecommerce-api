@@ -127,7 +127,70 @@ export class CustomerController {
             const { id } = getCustomerParamData;
 
             const data = await this.customerService.getItemById(id, store);
+            if (!data) {
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+
             return data;
+        } catch (err) {
+            if (err instanceof HttpException) throw err;
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Patch('/stores/me/customers/:id')
+    async UpdateMyCustomer(@Param() updateCustomerParamData: UpdateCustomerParamDto, @Body() updateCustomerData: UpdateCustomerDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            const { id } = updateCustomerParamData;
+
+            if (updateCustomerData.customFields) {
+                const customFieldValues = updateCustomerData.customFields
+                const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.CUSTOMER });
+    
+                const customFieldMap = new Map();
+                for (let i = 0; i < customFieldValues.length; i++) {
+                    customFieldMap.set(customFieldValues[i].customField, customFieldValues[i]);
+                }
+
+                for (let i = 0; i < customFields.length; i++) {
+                    const customField = customFields[i];
+                    const customFieldValue = customFieldMap.get(String(customField._id));
+
+                    if (!customFieldValue && customField.isRequired === true) {
+                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                    }
+                    else if (!customFieldValue) continue;
+
+                    if (
+                        customField.name !== customFieldValue.name ||
+                        (
+                            customField.type === CustomFieldType.INPUT &&
+                            typeof customFieldValue.value !== 'string'
+                        ) ||
+                        (
+                            customField.type === CustomFieldType.SELECT &&
+                            !Array.isArray(customFieldValue.value)
+                        )
+                    ) {
+                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                    }
+    
+                    if (customField.type === CustomFieldType.SELECT) {
+                        customFieldValue.value.forEach((elem: string) => {
+                            if (customField.subType.indexOf(elem) === -1) {
+                                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                            }
+                        });
+                    }
+                }
+            }
+
+            const result = await this.customerService.updateItem(id, updateCustomerData);
+            if (!result) {
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
         } catch (err) {
             if (err instanceof HttpException) throw err;
             throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
