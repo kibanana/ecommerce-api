@@ -35,6 +35,26 @@ API 서버는 `http://localhost:3000/api/v1` 에서 실행됩니다.
 
 ## MongoDB 데이터 모델링
 
+### CustomFieldValue
+
+`customers`, `products`, `orders` 컬렉션 내 `customFields` 필드에서 사용되는 서브도큐먼트의 스키마
+
+|필드|타입|설명|
+|------|---|---|
+|\_id|ObjectId|사용자 정의 필드 값 고유 ID|
+|customField|ObjectId|사용자 정의 필드 고유 ID|
+|name|String|사용자 정의 필드 이름|
+|type|String|사용자 정의 필드 타입 (enum CustomFieldType)|
+|value|Any|사용자 정의 필드 값|
+|isOnlyStoreWritable|Boolean|사용자 정의 필드 수정 권한 여부 (예시)적립금|
+
+```typescript
+export enum CustomFieldType {
+    SELECT = 'Select',
+    INPUT = 'Input',
+}
+```
+
 ### stores
 
 |필드|타입|설명|
@@ -53,7 +73,7 @@ API 서버는 `http://localhost:3000/api/v1` 에서 실행됩니다.
 |name|String|고객 이름|
 |email|String|고객 이메일|
 |password|String|고객 비밀번호|
-|customFields|CustomField[]|사용자 정의 필드 값|
+|customFields|CustomFieldValue[]|사용자 정의 필드 값|
 
 ### products
 
@@ -64,7 +84,7 @@ API 서버는 `http://localhost:3000/api/v1` 에서 실행됩니다.
 |name|String|상품 이름|
 |price|Number|상품 가격|
 |categories|String[]|상품 카테고리 목록|
-|customFields|CustomField[]|사용자 정의 필드 값|
+|customFields|CustomFieldValue[]|사용자 정의 필드 값|
 
 ### orders
 
@@ -76,7 +96,7 @@ API 서버는 `http://localhost:3000/api/v1` 에서 실행됩니다.
 |customer|ObjectId|고객 고유 ID|
 |products|ObjectId[]|상품 고유 ID 목록|
 |price|Number|주문 총액|
-|customFields|CustomField[]|사용자 정의 필드 값|
+|customFields|CustomFieldValue[]|사용자 정의 필드 값|
 
 ```typescript
 export enum OrderStatus {
@@ -107,7 +127,7 @@ export enum OrderStatus {
 |type|String|사용자 정의 필드 타입 (enum CustomFieldType)|
 |subType|String[]|사용자 정의 필드 타입이 `Select`인 경우 선택할 수 있는 선택지 목록|
 |isRequired|Boolean|사용자 정의 필드 필수 입력 여부|
-|isOnlyStoreWritable|Boolean|사용자 정의 필드 수정 권한 여부 예시)적립금|
+|isOnlyStoreWritable|Boolean|사용자 정의 필드 수정 권한 여부 (예시)적립금|
 
 ```typescript
 export enum CustomFieldTarget {
@@ -123,3 +143,11 @@ export enum CustomFieldType {
     INPUT = 'Input',
 }
 ```
+
+## 사용자 정의 필드 기능
+
+- 사용자 정의 필드 정보는 `customfields` 컬렉션에 저장합니다.
+- 사용자 정의 필드에 대해 입력된 값은 각 `customers`, `products`, `orders` 컬렉션에 서브도큐먼트 배열 형태로 저장합니다.
+- 사용자 정의 필드 정보(name, type, subType 등)가 변경되는 경우에 대비하기 위해 `customfields` 컬렉션의 도큐먼트를 조회할 필요 없이, `customers`, `products`, `orders` 컬렉션의 도큐먼트만 조회해도 사용자 정의 필드 값 데이터를 응답할 수 있게 구성하였습니다.
+
+## API 문서
