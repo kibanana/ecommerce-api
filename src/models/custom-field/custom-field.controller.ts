@@ -63,7 +63,7 @@ export class CustomFieldController {
             return { id: customField._id };
         } catch (err) {
             if (err instanceof HttpException) throw err;
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
