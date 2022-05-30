@@ -23,6 +23,7 @@ import { GetProductItemDto } from './dto/get-product-item.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UpdateProductParamDto } from './dto/update-product-param.dto';
 import { DeleteProductDto } from './dto/delete-product.dto';
+import { ErrorCode } from '../../common/constants/errorCode';
 
 @Controller()
 export class ProductController {
@@ -39,7 +40,7 @@ export class ProductController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             // TODO custom fields
@@ -52,7 +53,7 @@ export class ProductController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,7 +69,7 @@ export class ProductController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const data = await this.productService.getList(store, { offset, limit } as GetProductListDto);
@@ -78,7 +79,7 @@ export class ProductController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -93,7 +94,7 @@ export class ProductController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const data = await this.productService.getList(store, { offset, limit } as GetProductListDto);
@@ -103,7 +104,7 @@ export class ProductController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -115,12 +116,12 @@ export class ProductController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const product = await this.productService.getItemByStore(store, getMyProductItemData);
             if (!product) {
-                throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             return product;
@@ -129,7 +130,7 @@ export class ProductController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -138,12 +139,12 @@ export class ProductController {
         try {
             const storeDoesExist = await this.storeService.doesExistById(getProductItemData.storeid);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const product = await this.productService.getItem(getProductItemData);
             if (!product) {
-                throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             // TODO customFields
@@ -154,7 +155,7 @@ export class ProductController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -167,21 +168,21 @@ export class ProductController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             // TODO customfields
 
             const result = await this.productService.updateItem(id, updateProductData);
             if (!result) {
-                throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -194,19 +195,19 @@ export class ProductController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const result = await this.productService.deleteItem(id);
             if (!result) {
-                throw new HttpException('ERR_PRODUCT_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

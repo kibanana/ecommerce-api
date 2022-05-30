@@ -4,6 +4,7 @@ import {
     HttpException,
     HttpStatus,
     Param,
+    Post,
     Request,
     UseGuards,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { CustomFieldService } from './custom-field.service';
 import { GetCustomFieldListDto } from './dto/get-custom-field-list.dto';
 import { StoreJwtStrategyGuard } from '../../auth/guard/store-jwt.guard';
 import { CustomerJwtStrategyGuard } from '../../auth/guard/customer-jwt.guard';
+import { ErrorCode } from '../../common/constants/errorCode';
 
 @Controller()
 export class CustomFieldController {
@@ -27,7 +29,7 @@ export class CustomFieldController {
 
             const doesExist = await this.storeService.doesExistById(store);
             if (!doesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             
             const customFields = await this.customFieldService.getCustomerList(store);
@@ -37,7 +39,7 @@ export class CustomFieldController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -49,7 +51,7 @@ export class CustomFieldController {
 
             const doesExist = await this.storeService.doesExistById(store);
             if (!doesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             
             const customFields = await this.customFieldService.getOrderList(store);
@@ -59,19 +61,19 @@ export class CustomFieldController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @UseGuards(StoreJwtStrategyGuard)
-    @Get('/stores/me/products/custom-fields')
+    @Get('/stores/me/custom-fields')
     async GetMyProductCustomFieldList(@Request() req) {
         try {
             const { id: store } = req.user;
 
             const doesExist = await this.storeService.doesExistById(store);
             if (!doesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             
             const customFields = await this.customFieldService.getProductList(store);
@@ -81,7 +83,7 @@ export class CustomFieldController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

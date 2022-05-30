@@ -1,6 +1,7 @@
 import { Controller, Post, UseGuards, Request, HttpException, HttpStatus } from '@nestjs/common';
 import { AuthStoreService } from '../service/auth.store.service';
 import { StoreLocalStrategyGuard } from '../guard/store-local.guard';
+import { ErrorCode } from '../../common/constants/errorCode';
 
 @Controller('auth/stores')
 export class AuthStoreController {
@@ -16,7 +17,7 @@ export class AuthStoreController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -17,6 +17,7 @@ import { GetStoreListDto } from './dto/get-store-list.dto';
 import { UpdateStorePasswordDto } from './dto/update-store-password.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { StoreService } from './store.service';
+import { ErrorCode } from '../../common/constants/errorCode';
 
 @Controller('stores')
 export class StoreController {
@@ -27,7 +28,7 @@ export class StoreController {
         try {
             const doesExist = await this.storeService.doesExist(createStoreData.email, createStoreData.name);
             if (doesExist) {
-                throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
+                throw new HttpException(ErrorCode.ERR_STORE_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
             const store = await this.storeService.createItem(createStoreData);
@@ -37,7 +38,7 @@ export class StoreController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -56,7 +57,7 @@ export class StoreController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,7 +69,7 @@ export class StoreController {
 
             const store = await this.storeService.getItemById(id);
             if (!store) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             
             return store;
@@ -77,7 +78,7 @@ export class StoreController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -89,19 +90,19 @@ export class StoreController {
 
             const doesExist = await this.storeService.doesExist(updateStoreData.email, updateStoreData.name);
             if (doesExist) {
-                throw new HttpException('ERR_STORE_ALREADY_EXISTS', HttpStatus.CONFLICT);
+                throw new HttpException(ErrorCode.ERR_STORE_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
             const result = await this.storeService.updateItem(store, updateStoreData);
             if (!result) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -113,24 +114,24 @@ export class StoreController {
 
             const isDuplicated = updateStorePasswordData.oldPassword === updateStorePasswordData.newPassword;
             if (isDuplicated) {
-                throw new HttpException('ERR_DUPLICATED_PARAM', HttpStatus.CONFLICT);
+                throw new HttpException(ErrorCode.ERR_DUPLICATED_PARAM, HttpStatus.BAD_REQUEST);
             }
 
             const isCertified = await this.storeService.comparePassword(store, updateStorePasswordData);
             if (!isCertified) {
-                throw new HttpException('ERR_INVALID_ACCESS', HttpStatus.FORBIDDEN);
+                throw new HttpException(ErrorCode.ERR_INVALID_ACCESS, HttpStatus.FORBIDDEN);
             }
 
             const result = await this.storeService.updateItemPasssword(store, updateStorePasswordData);
             if (!result) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -142,14 +143,14 @@ export class StoreController {
 
             const result = await this.storeService.deleteItem(store);
             if (!result) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

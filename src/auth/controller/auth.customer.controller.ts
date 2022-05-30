@@ -2,6 +2,7 @@ import { Controller, Post, UseGuards, Request, HttpException, HttpStatus, Param 
 import { AuthCustomerService } from '../service/auth.customer.service';
 import { CustomerLocalStrategyGuard } from '../guard/customer-local.guard';
 import { CustomerSignInDto } from '../dto/customer-sign-in.dto';
+import { ErrorCode } from '../../common/constants/errorCode';
 
 @Controller('auth')
 export class AuthCustomerController {
@@ -17,7 +18,7 @@ export class AuthCustomerController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

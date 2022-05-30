@@ -21,6 +21,7 @@ import { CreateCustomerParamDto } from './dto/create-customer-param.dto';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerPasswordDto } from './dto/update-customer-password.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { ErrorCode } from '../../common/constants/errorCode';
 
 @Controller()
 export class CustomerController {
@@ -36,12 +37,12 @@ export class CustomerController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const customerDoesExist = await this.customerService.doesExist(store, createCustomerData.email);
             if (customerDoesExist) {
-                throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
             // TODO custom fields
@@ -54,7 +55,7 @@ export class CustomerController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -75,7 +76,7 @@ export class CustomerController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -87,12 +88,12 @@ export class CustomerController {
 
             const storeDoesExist = await this.storeService.getItemById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const customer = await this.customerService.getItemById(id, store);
             if (!customer) {
-                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             return customer;
         } catch (err) {
@@ -100,7 +101,7 @@ export class CustomerController {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -112,26 +113,26 @@ export class CustomerController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const customerDoesExist = await this.customerService.doesExist(store, updateCustomerData.email);
             if (customerDoesExist) {
-                throw new HttpException('ERR_CUSTOMER_ALREADY_EXISTS', HttpStatus.CONFLICT);
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
             // TODO custom fields
 
             const result = await this.customerService.updateItem(id, updateCustomerData);
             if (!result) {
-                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -143,29 +144,29 @@ export class CustomerController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const isDuplicated = updateCustomerPasswordData.oldPassword === updateCustomerPasswordData.newPassword;
             if (isDuplicated) {
-                throw new HttpException('ERR_DUPLICATED_PARAM', HttpStatus.BAD_REQUEST);
+                throw new HttpException(ErrorCode.ERR_DUPLICATED_PARAM, HttpStatus.BAD_REQUEST);
             }
 
             const isCertified = await this.customerService.comparePassword(id, updateCustomerPasswordData);
             if (!isCertified) {
-                throw new HttpException('ERR_INVALID_ACCESS', HttpStatus.FORBIDDEN);
+                throw new HttpException(ErrorCode.ERR_INVALID_ACCESS, HttpStatus.FORBIDDEN);
             }
 
             const result = await this.customerService.updateItemPasssword(id, updateCustomerPasswordData);
             if (!result) {
-                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -177,19 +178,19 @@ export class CustomerController {
 
             const storeDoesExist = await this.storeService.doesExistById(store);
             if (!storeDoesExist) {
-                throw new HttpException('ERR_STORE_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             const result = await this.customerService.deleteItem(id);
             if (!result) {
-                throw new HttpException('ERR_CUSTOMER_NOT_FOUND', HttpStatus.NOT_FOUND);
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) {
                 throw err;
             }
             
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
