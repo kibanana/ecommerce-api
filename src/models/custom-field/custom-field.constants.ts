@@ -14,9 +14,9 @@ export enum CustomFieldType {
     INPUT = 'Input',
 }
 
-export enum CustomFieldSubType {
-    NUMBER = 'Number',
-    STRING = 'String',
-    BOOLEAN = 'Boolean',
-    DATE = 'Date',
-}
+// export enum CustomFieldSubType {
+//     NUMBER = 'Number',
+//     STRING = 'String',
+//     BOOLEAN = 'Boolean',
+//     DATE = 'Date',
+// }

@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsString, IsNotEmpty, IsNumber, ValidateNested, IsOptional } from 'class-validator';
-import { CustomField } from './custom-field.dto';
+import { CustomField } from '../../common/custom-field.dto';
 
 export class UpdateProductDto {
     @IsNotEmpty()
@@ -15,12 +15,10 @@ export class UpdateProductDto {
     @IsString({ each: true })
     readonly categories: string[];
 
-    @IsOptional()
+    @IsNotEmpty()
     @ValidateNested({ each: true })
     @Type(() => CustomField)
     readonly customFields: CustomField[];
-
-    // TODO customfields
 
     constructor(name: string, price: number, categories: string[], customFields: CustomField[]) {
         this.name = name;

@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Order, OrderSchema } from './schema/order.schema';
 import { CustomerModule } from '../customer/customer.module';
 import { ProductModule } from '../product/product.module';
+import { CustomFieldModule } from '../custom-field/custom-field.module';
 
 @Module({
 	imports: [
@@ -13,6 +14,7 @@ import { ProductModule } from '../product/product.module';
 		StoreModule,
 		CustomerModule,
 		ProductModule,
+		CustomFieldModule,
 	],
 	controllers: [OrderController],
 	providers: [OrderService]

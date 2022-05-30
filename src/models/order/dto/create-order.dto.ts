@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, ValidateNested, IsOptional, IsMongoId, Min, ArrayMinSize } from 'class-validator';
-import { CustomField } from '../../product/dto/custom-field.dto';
+import { CustomField } from '../../common/custom-field.dto';
 
 export class CreateOrderDto {
     @IsMongoId({ each: true })
@@ -12,7 +12,7 @@ export class CreateOrderDto {
     @Min(99)
     readonly price: number;
 
-    @IsOptional()
+    @IsNotEmpty()
     @ValidateNested({ each: true })
     @Type(() => CustomField)
     readonly customFields: CustomField[];

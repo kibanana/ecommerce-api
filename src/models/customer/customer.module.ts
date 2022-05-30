@@ -5,6 +5,7 @@ import { CustomerService } from './customer.service';
 import { CustomerController } from './customer.controller';
 import { Customer, CustomerSchema } from './schema/customer.schema';
 import { StoreModule } from '../store/store.module';
+import { CustomFieldModule } from '../custom-field/custom-field.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { StoreModule } from '../store/store.module';
             },
         ]),
         StoreModule,
+        CustomFieldModule,
     ],
     providers: [CustomerService],
     controllers: [CustomerController],

@@ -18,8 +18,8 @@ export class CustomField {
 	@Prop({ required: true })
 	type: string;
 
-	@Prop({ required: true, type: mongoose.Schema.Types.Mixed })
-	subType: mongoose.Schema.Types.Mixed;
+	@Prop()
+	subType: string[];
 
 	@Prop({ required: true })
 	isRequired: boolean;

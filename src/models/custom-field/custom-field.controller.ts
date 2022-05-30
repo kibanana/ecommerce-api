@@ -20,7 +20,7 @@ import { ErrorCode } from '../../common/constants/errorCode';
 import { GetMyCustomFieldListQueryDto } from './dto/get-my-custom-filed-list-query.dto';
 import { GetCustomFieldListQueryDto } from './dto/get-custom-filed-list-query.dto';
 import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
-import { CustomFieldType, CustomFieldSubType } from './custom-field.constants';
+import { CustomFieldType } from './custom-field.constants';
 import { UpdateCustomFieldParamDto } from './dto/update-custom-field-param.dto';
 import { UpdateCustomFieldDto } from './dto/update-custom-field.dto';
 import { DeleteCustomFieldParamDto } from './dto/delete-custom-field-param.dto';
@@ -39,6 +39,7 @@ export class CustomFieldController {
             const { type, subType } = createCustomFieldData;
 
             if (
+                type === CustomFieldType.INPUT && subType ||
                 (
                     type === CustomFieldType.SELECT &&
                     (
@@ -46,11 +47,6 @@ export class CustomFieldController {
                         subType.length <= 0 ||
                         typeof subType[0] !== 'string'
                     )
-                )
-                ||
-                (
-                    type === CustomFieldType.INPUT &&
-                    !Object.values(CustomFieldSubType).includes(subType)
                 )
             ) {
                 throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
@@ -98,6 +94,7 @@ export class CustomFieldController {
             const { type, subType } = updateCustomFieldData;
 
             if (
+                type === CustomFieldType.INPUT && subType ||
                 (
                     type === CustomFieldType.SELECT &&
                     (
@@ -105,11 +102,6 @@ export class CustomFieldController {
                         subType.length <= 0 ||
                         typeof subType[0] !== 'string'
                     )
-                )
-                ||
-                (
-                    type === CustomFieldType.INPUT &&
-                    !Object.values(CustomFieldSubType).includes(subType)
                 )
             ) {
                 throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);

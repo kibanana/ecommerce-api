@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsIn, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsIn, IsBoolean, IsOptional } from 'class-validator';
 import { CustomFieldTarget, CustomFieldType } from '../custom-field.constants';
 
 export class UpdateCustomFieldDto {
@@ -11,17 +11,19 @@ export class UpdateCustomFieldDto {
     @IsIn(Object.values(CustomFieldType))
     readonly type: string;
 
-    @IsNotEmpty()
-    readonly subType: any;
+    @IsOptional()
+    @IsString({ each: true })
+    readonly subType: string[];
 
     @IsNotEmpty()
     @IsBoolean()
     readonly isRequired: boolean;
 
+    @IsOptional()
     @IsBoolean()
     readonly isOnlyStoreWritable: boolean;
 
-    constructor(name: string, type: string, subType: string, isRequired: boolean, isOnlyStoreWritable: boolean) {
+    constructor(name: string, type: string, subType: string[], isRequired: boolean, isOnlyStoreWritable: boolean) {
         this.name = name;
         this.type = type;
         this.subType = subType;

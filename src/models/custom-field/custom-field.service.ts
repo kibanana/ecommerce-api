@@ -19,6 +19,10 @@ export class CustomFieldService {
     getList(store: string, { target }: GetCustomFieldListQueryDto) {
         return this.customFieldModel.find({ store, target });
     }
+
+    getListByIds(ids: string[], store: string) {
+        return this.customFieldModel.find({ _id: { $in: ids }, store });
+    }
     
     updateItem(id: string, { name, type, subType, isRequired, isOnlyStoreWritable }: UpdateCustomFieldDto) {
         return this.customFieldModel.findByIdAndUpdate(

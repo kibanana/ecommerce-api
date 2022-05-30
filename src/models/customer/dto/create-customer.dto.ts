@@ -1,4 +1,6 @@
-import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsNotEmpty, IsEmail, IsOptional, ValidateNested } from 'class-validator';
+import { CustomField } from 'src/models/common/custom-field.dto';
 
 export class CreateCustomerDto {
     @IsNotEmpty()
@@ -14,11 +16,15 @@ export class CreateCustomerDto {
     @IsString()
     readonly password: string;
 
-    // TODO customfields
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    @Type(() => CustomField)
+    readonly customFields: CustomField[];
 
-    constructor(name: string, email: string, password: string) {
+    constructor(name: string, email: string, password: string, customFields: CustomField[]) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.customFields = customFields;
     }
 }

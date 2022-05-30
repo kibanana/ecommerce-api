@@ -12,5 +12,6 @@ import { CustomField, CustomFieldSchema } from './schema/custom-field.schema';
 	],
 	controllers: [CustomFieldController],
 	providers: [CustomFieldService],
+	exports: [CustomFieldService],
 })
 export class CustomFieldModule {}

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, ValidateNested, IsOptional, IsMongoId } from 'class-validator';
+import { IsString, IsNotEmpty, IsMongoId, IsBoolean, IsOptional } from 'class-validator';
 
 export class CustomField {
     @IsNotEmpty()

@@ -22,12 +22,17 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerPasswordDto } from './dto/update-customer-password.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { ErrorCode } from '../../common/constants/errorCode';
+import { CustomFieldTarget, CustomFieldType } from '../custom-field/custom-field.constants';
+import { CustomFieldService } from '../custom-field/custom-field.service';
+import { GetCustomerParamDto } from './dto/get-customer-item-param.dto';
+import { UpdateCustomerParamDto } from './dto/update-customer-param.dto';
 
 @Controller()
 export class CustomerController {
     constructor(
         private customerService: CustomerService,
         private storeService: StoreService,
+        private customFieldService: CustomFieldService,
     ) {}
 
     @Post('/stores/:id/customers')
@@ -44,8 +49,50 @@ export class CustomerController {
             if (customerDoesExist) {
                 throw new HttpException(ErrorCode.ERR_CUSTOMER_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
+            
+            if (createCustomerData.customFields) {
+                const customFieldValues = createCustomerData.customFields
+                const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.CUSTOMER });
 
-            // TODO customfields
+                console.log(customFields)
+    
+                const customFieldMap = new Map();
+                for (let i = 0; i < customFieldValues.length; i++) {
+                    customFieldMap.set(customFieldValues[i].customField, customFieldValues[i]);
+                }
+
+                for (let i = 0; i < customFields.length; i++) {
+                    const customField = customFields[i];
+                    const customFieldValue = customFieldMap.get(String(customField._id));
+
+                    if (!customFieldValue && customField.isRequired === true) {
+                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                    }
+                    else if (!customFieldValue) continue;
+
+                    if (
+                        customField.name !== customFieldValue.name ||
+                        (
+                            customField.type === CustomFieldType.INPUT &&
+                            typeof customFieldValue.value !== 'string'
+                        ) ||
+                        (
+                            customField.type === CustomFieldType.SELECT &&
+                            !Array.isArray(customFieldValue.value)
+                        )
+                    ) {
+                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                    }
+    
+                    if (customField.type === CustomFieldType.SELECT) {
+                        customFieldValue.value.forEach((elem: string) => {
+                            if (customField.subType.indexOf(elem) === -1) {
+                                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                            }
+                        });
+                    }
+                }
+            }
             
             const customer = await this.customerService.createItem(store, createCustomerData);
             
@@ -112,7 +159,48 @@ export class CustomerController {
                 throw new HttpException(ErrorCode.ERR_CUSTOMER_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
-            // TODO customfields
+            if (updateCustomerData.customFields) {
+                const customFieldValues = updateCustomerData.customFields
+                const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.CUSTOMER });
+    
+                const customFieldMap = new Map();
+                for (let i = 0; i < customFieldValues.length; i++) {
+                    customFieldMap.set(customFieldValues[i].customField, customFieldValues[i]);
+                }
+
+                for (let i = 0; i < customFields.length; i++) {
+                    const customField = customFields[i];
+                    const customFieldValue = customFieldMap.get(String(customField._id));
+
+                    if (!customFieldValue && customField.isRequired === true) {
+                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                    }
+                    else if (!customFieldValue) continue;
+
+                    if (
+                        customField.name !== customFieldValue.name ||
+                        customField.isOnlyStoreWritable === true ||
+                        (
+                            customField.type === CustomFieldType.INPUT &&
+                            typeof customFieldValue.value !== 'string'
+                        ) ||
+                        (
+                            customField.type === CustomFieldType.SELECT &&
+                            !Array.isArray(customFieldValue.value)
+                        )
+                    ) {
+                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                    }
+    
+                    if (customField.type === CustomFieldType.SELECT) {
+                        customFieldValue.value.forEach((elem: string) => {
+                            if (customField.subType.indexOf(elem) === -1) {
+                                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
+                            }
+                        });
+                    }
+                }
+            }
 
             const result = await this.customerService.updateItem(id, updateCustomerData);
             if (!result) {

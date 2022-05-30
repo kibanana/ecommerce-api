@@ -26,8 +26,6 @@ export class CustomerService {
             { skip: offset * limit, limit }
         );
 
-        // TODO purchaseCount, productCount, amount
-
         const count = await this.customerModel.countDocuments({ store });
 
         return { list, count };
