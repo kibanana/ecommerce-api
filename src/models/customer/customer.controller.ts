@@ -51,44 +51,9 @@ export class CustomerController {
             }
             
             if (createCustomerData.customFields) {
-                const customFieldValues = createCustomerData.customFields
-                const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.CUSTOMER });
-    
-                const customFieldMap = new Map();
-                for (let i = 0; i < customFieldValues.length; i++) {
-                    customFieldMap.set(customFieldValues[i].customField, customFieldValues[i]);
-                }
-
-                for (let i = 0; i < customFields.length; i++) {
-                    const customField = customFields[i];
-                    const customFieldValue = customFieldMap.get(String(customField._id));
-
-                    if (!customFieldValue && customField.isRequired === true) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-                    else if (!customFieldValue) continue;
-
-                    if (
-                        customField.name !== customFieldValue.name ||
-                        (
-                            customField.type === CustomFieldType.INPUT &&
-                            typeof customFieldValue.value !== 'string'
-                        ) ||
-                        (
-                            customField.type === CustomFieldType.SELECT &&
-                            !Array.isArray(customFieldValue.value)
-                        )
-                    ) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-    
-                    if (customField.type === CustomFieldType.SELECT) {
-                        customFieldValue.value.forEach((elem: string) => {
-                            if (customField.subType.indexOf(elem) === -1) {
-                                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                            }
-                        });
-                    }
+                const validationResult = this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, createCustomerData.customFields);
+                if (!validationResult) {
+                    throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }
             }
             
@@ -145,45 +110,15 @@ export class CustomerController {
             const { id: store } = req.user;
             const { id } = updateCustomerParamData;
 
+            const customerDoesExist = await this.customerService.doesExist(store, updateCustomerData.email);
+            if (customerDoesExist) {
+                throw new HttpException(ErrorCode.ERR_CUSTOMER_ALREADY_EXISTS, HttpStatus.CONFLICT);
+            }
+
             if (updateCustomerData.customFields) {
-                const customFieldValues = updateCustomerData.customFields
-                const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.CUSTOMER });
-    
-                const customFieldMap = new Map();
-                for (let i = 0; i < customFieldValues.length; i++) {
-                    customFieldMap.set(customFieldValues[i].customField, customFieldValues[i]);
-                }
-
-                for (let i = 0; i < customFields.length; i++) {
-                    const customField = customFields[i];
-                    const customFieldValue = customFieldMap.get(String(customField._id));
-
-                    if (!customFieldValue && customField.isRequired === true) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-                    else if (!customFieldValue) continue;
-
-                    if (
-                        customField.name !== customFieldValue.name ||
-                        (
-                            customField.type === CustomFieldType.INPUT &&
-                            typeof customFieldValue.value !== 'string'
-                        ) ||
-                        (
-                            customField.type === CustomFieldType.SELECT &&
-                            !Array.isArray(customFieldValue.value)
-                        )
-                    ) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-    
-                    if (customField.type === CustomFieldType.SELECT) {
-                        customFieldValue.value.forEach((elem: string) => {
-                            if (customField.subType.indexOf(elem) === -1) {
-                                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                            }
-                        });
-                    }
+                const validationResult = this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, updateCustomerData.customFields);
+                if (!validationResult) {
+                    throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }
             }
 
@@ -236,45 +171,9 @@ export class CustomerController {
             }
 
             if (updateCustomerData.customFields) {
-                const customFieldValues = updateCustomerData.customFields
-                const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.CUSTOMER });
-    
-                const customFieldMap = new Map();
-                for (let i = 0; i < customFieldValues.length; i++) {
-                    customFieldMap.set(customFieldValues[i].customField, customFieldValues[i]);
-                }
-
-                for (let i = 0; i < customFields.length; i++) {
-                    const customField = customFields[i];
-                    const customFieldValue = customFieldMap.get(String(customField._id));
-
-                    if (!customFieldValue && customField.isRequired === true) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-                    else if (!customFieldValue) continue;
-
-                    if (
-                        customField.name !== customFieldValue.name ||
-                        customField.isOnlyStoreWritable === true ||
-                        (
-                            customField.type === CustomFieldType.INPUT &&
-                            typeof customFieldValue.value !== 'string'
-                        ) ||
-                        (
-                            customField.type === CustomFieldType.SELECT &&
-                            !Array.isArray(customFieldValue.value)
-                        )
-                    ) {
-                        throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                    }
-    
-                    if (customField.type === CustomFieldType.SELECT) {
-                        customFieldValue.value.forEach((elem: string) => {
-                            if (customField.subType.indexOf(elem) === -1) {
-                                throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
-                            }
-                        });
-                    }
+                const validationResult = this.customFieldService.validate(store, CustomFieldTarget.CUSTOMER, updateCustomerData.customFields, true);
+                if (!validationResult) {
+                    throw new HttpException(ErrorCode.ERR_INVALID_PARAM, HttpStatus.BAD_REQUEST);
                 }
             }
 
