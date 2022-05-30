@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpException,
     HttpStatus,
@@ -22,6 +23,7 @@ import { CreateCustomFieldDto } from './dto/create-custom-field.dto';
 import { CustomFieldType, CustomFieldSubType } from './custom-field.constants';
 import { UpdateCustomFieldParamDto } from './dto/update-custom-field-param.dto';
 import { UpdateCustomFieldDto } from './dto/update-custom-field.dto';
+import { DeleteCustomFieldParamDto } from './dto/delete-custom-field-param.dto';
 
 @Controller()
 export class CustomFieldController {
@@ -118,13 +120,35 @@ export class CustomFieldController {
                 throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
-            const result = await this.customFieldService.updateItem(id, store, updateCustomFieldData);
+            const result = await this.customFieldService.updateItem(id, updateCustomFieldData);
             if (!result) {
                 throw new HttpException(ErrorCode.ERR_CUSTOM_FIELD_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
         } catch (err) {
             if (err instanceof HttpException) throw err;
-            throw new HttpException('ERR_INTERNAL_SERVER', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Delete('/stores/me/custom-fields/:id')
+    async DeleteCustomField(@Param() deleteCustomFieldParamData: DeleteCustomFieldParamDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            const { id } = deleteCustomFieldParamData;
+
+            const storeDoesExist = await this.storeService.doesExistById(store);
+            if (!storeDoesExist) {
+                throw new HttpException(ErrorCode.ERR_STORE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+
+            const result = await this.customFieldService.deleteItem(id);
+            if (!result) {
+                throw new HttpException(ErrorCode.ERR_CUSTOM_FIELD_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+        } catch (err) {
+            if (err instanceof HttpException) throw err;
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

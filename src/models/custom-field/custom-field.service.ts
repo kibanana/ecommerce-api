@@ -42,10 +42,14 @@ export class CustomFieldService {
         });
     }
 
-    updateItem(id: string, store: string, { name, type, subType, isRequired, isOnlyStoreWritable }: UpdateCustomFieldDto) {
-        return this.customFieldModel.findOneAndUpdate(
-            { id, store },
+    updateItem(id: string, { name, type, subType, isRequired, isOnlyStoreWritable }: UpdateCustomFieldDto) {
+        return this.customFieldModel.findByIdAndUpdate(
+            id,
             { name, type, subType, isRequired, isOnlyStoreWritable }
         );
+    }
+
+    deleteItem(id: string) {
+        return this.customFieldModel.findByIdAndDelete(id);
     }
 }
