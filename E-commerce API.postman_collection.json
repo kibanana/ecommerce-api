@@ -1,0 +1,1006 @@
+{
+	"info": {
+		"_postman_id": "8550d381-8022-487d-a707-e5ebeef66446",
+		"name": "E-commerce API",
+		"description": "# 소개\n식스샵 사전과제\n\n# 인증\n- store jwt (/stores/me)\n- customer jwt (/customers/me)\n\n# 에러코드\n- 200 (OK)\n- 400 (Bad Request)\n- 401 (Unauthorized)\n- 404 (Not Found)\n- 409 (Conflict)\n- 500 (Internal Server Error)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST /auth/stores/sign-in",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"a@gmail.com\",\n    \"password\": \"asdf\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/auth/stores/sign-in",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"auth",
+						"stores",
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /auth/stores/:id/customers/sign-in",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"a@gmail.com\",\n    \"password\": \"asdf\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/auth/stores/:id/customers/sign-in",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"auth",
+						"stores",
+						":id",
+						"customers",
+						"sign-in"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /stores",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"A\",\n    \"email\": \"a@gmail.com\",\n    \"password\": \"asdf\",\n    \"customFields\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /stores/me",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"e@gmail.com\",\n    \"name\": \"E\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /stores/me/password",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"oldPassword\": \"asdf\",\n    \"newPassword\": \"asdfasdf\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me/password",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /stores/me",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /stores/:id/customers",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"A\",\n    \"email\": \"a@gmail.com\",\n    \"password\": \"asdf\",\n    \"customFields\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/:id/customers",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						":id",
+						"customers"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/customers",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/customers/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/customers/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"customers",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /stores/me/customers/:id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"b@gmail.com\",\n    \"name\": \"B\",\n    \"customFields\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me/customers/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"customers",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /customers/me",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/customers/me",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"customers",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /customers/me",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"c@gmail.com\",\n    \"name\": \"C\",\n    \"customFields\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/customers/me",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"customers",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /customers/me/password",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"oldPassword\": \"asdf\",\n    \"newPassword\": \"asdfasdf\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/customers/me/password",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"customers",
+						"me",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /customers/me",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/customers/me",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"customers",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /stores/me/products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"상품1\",\n    \"price\": 10000,\n    \"categories\": [],\n    \"customFields\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me/products",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/products",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"products"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/:id/products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/:id/products",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						":id",
+						"products"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/products/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/products/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/:storeid/products/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/:storeid/products/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						":storeid",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "storeid",
+							"value": ""
+						},
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /stores/me/products/:id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"상품111\",\n    \"price\": 10000,\n    \"categories\": [],\n    \"customFields\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me/products/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /stores/me/products/:id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/products/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /orders",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"products\": [\"\"],\n    \"price\": 10000,\n    \"customFields\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/orders",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/orders",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/orders/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/orders/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"orders",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/customers/:id/orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/customers/:id/orders",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"customers",
+						":id",
+						"orders"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /customers/me/orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/customers/me/orders",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"customers",
+						"me",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /customers/me/orders/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/customers/me/orders/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"customers",
+						"me",
+						"orders",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /customers/me/orders/:id/stauts",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"ConfirmPurchase\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/customers/me/orders/:id/stauts",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"customers",
+						"me",
+						"orders",
+						":id",
+						"stauts"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /stores/me/orders/:id/stauts",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"CompletePayment\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me/orders/:id/stauts",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"orders",
+						":id",
+						"stauts"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /stores/me/custom-fields",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"target\": \"Customer\",\n    \"name\": \"사용자필드1\",\n    \"type\": \"Input\",\n    \"isRequired\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me/custom-fields",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"custom-fields"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/me/custom-fields",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/custom-fields?target=Customer",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"custom-fields"
+					],
+					"query": [
+						{
+							"key": "target",
+							"value": "Customer"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /stores/me/custom-fields/:id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"사용자필드111\",\n    \"type\": \"Input\",\n    \"subType\": \"String\",\n    \"isRequired\": true,\n    \"isOnlyStoreWritable\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/stores/me/custom-fields/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"custom-fields",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /stores/me/custom-fields/:id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/me/custom-fields/:id",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						"me",
+						"custom-fields",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /stores/:id/custom-fields",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/stores/:id/custom-fields?target=Customer",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"stores",
+						":id",
+						"custom-fields"
+					],
+					"query": [
+						{
+							"key": "target",
+							"value": "Customer"
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTM0ZjI3M2QxMjRjMGM4MWFhZDE0MSIsImlhdCI6MTY1MzkwODk3OSwiZXhwIjoxNjUzOTk1Mzc5LCJpc3MiOiJzaXhzaG9wLmNvbSJ9.xlHDDQUR7vHy2Et84U64O10rYVLCMytSqPgkrq8UkHQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
