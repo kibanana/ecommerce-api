@@ -223,12 +223,24 @@ export enum CustomFieldType {
   - 상점 목록을 조회합니다.
 - GET /stores/me
   - 제 상점 정보를 가져옵니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - PATCH /stores/me
   - 제 상점 정보를 수정합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - PATCH /stores/me/password
   - 제 상점 비밀번호를 변경합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - DELETE /stores/me
   - 제 상점을 삭제합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 
 ### `/customers`
 
@@ -236,35 +248,71 @@ export enum CustomFieldType {
   - 특정 상점에 고객 계정을 생성합니다.
 - GET /stores/me/customers
   - 제 상점의 고객 목록을 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/me/customers/:id
   - 제 상점의 고객 정보를 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - PATCH /stores/me/customers/:id
   - 제 상점의 고객 정보를 변경합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /customers/me
   - 제 고객 정보를 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {customer-jwt}
 - PATCH /customers/me
   - 제 고객 정보를 수정합니다.
+  - Request
+    - Headers
+      - Authorization: {customer-jwt}
 - PATCH /customers/me/password
   - 제 고객 비밀번호를 변경합니다.
+  - Request
+    - Headers
+      - Authorization: {customer-jwt}
 - DELETE /customers/me
   - 제 고객 계정을 삭제합니다.
+  - Request
+    - Headers
+      - Authorization: {customer-jwt}
 
 ### `/products`
 
 - POST /stores/me/products
   - 제 상점에 상품 정보를 생성합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/me/products
   - 제 상점의 상품 목록을 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/:id/products
   - 특정 상점의 상품 목록을 조회합니다.
 - GET /stores/me/products/:id
   - 제 상점의 상품 정보를 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/:storeid/products/:id
   - 특정 상점의 상품 정보를 조회합니다.
 - PATCH /stores/me/products/:id
   - 제 상점의 상품 정보를 변경합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - DELETE /stores/me/products/:id
   - 제 상점의 상품 정보를 삭제합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 
 ### `/orders`
 
@@ -272,29 +320,61 @@ export enum CustomFieldType {
   - 주문 정보를 생성합니다.
 - GET /stores/me/orders
   - 제 상점의 주문 목록을 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/me/orders/:id
   - 제 상점의 주문 정보를 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/me/customers/:id/orders
   - 제 상점의 특정 고객의 주문 목록을 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /customers/me/orders
-  - 제 고객 주문 목록을 조회합니다.
+  - 제 주문 목록을 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {customer-jwt}
 - GET /customers/me/orders/:id
-  - 제 고객 주문 정보를 조회합니다.
+  - 제 주문 정보를 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {customer-jwt}
 - PATCH /customers/me/orders/:id/stauts
-  - 제 고객의 특정 주문 정보의 상태를 변경합니다.
+  - 제 특정 주문 정보의 상태를 변경합니다.
+  - Request
+    - Headers
+      - Authorization: {customer-jwt}
 - PATCH /stores/me/orders/:id/stauts
   - 제 상점의 특정 주문 정보의 상태를 변경합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 
 ### `/custom-fields`
 
 - POST /stores/me/custom-fields
   - 제 상점에 사용자 정의 필드 정보를 생성합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/me/custom-fields
   - 제 상점의 사용자 정의 필드 목록을 조회합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - PATCH /stores/me/custom-fields/:id
   - 제 상점의 사용자 정의 필드 정보를 변경합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - DELETE /stores/me/custom-fields/:id
   - 제 상점의 사용자 정의 필드 정보를 삭제합니다.
+  - Request
+    - Headers
+      - Authorization: {store-jwt}
 - GET /stores/:id/custom-fields
   - 특정 상점의 사용자 정의 필드 정보를 가져옵니다.
-
