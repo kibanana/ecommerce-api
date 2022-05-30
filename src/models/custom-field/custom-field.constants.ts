@@ -3,3 +3,8 @@ export enum CustomFieldTarget {
     PRODUCT = 'Product',
     ORDER = 'Order',
 }
+
+export const CustomerCustomFieldTarget = [
+    CustomFieldTarget.CUSTOMER,
+    CustomFieldTarget.ORDER,
+];
