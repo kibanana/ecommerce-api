@@ -53,8 +53,6 @@ export class CustomerController {
             if (createCustomerData.customFields) {
                 const customFieldValues = createCustomerData.customFields
                 const customFields = await this.customFieldService.getList(store, { target: CustomFieldTarget.CUSTOMER });
-
-                console.log(customFields)
     
                 const customFieldMap = new Map();
                 for (let i = 0; i < customFieldValues.length; i++) {
@@ -114,6 +112,21 @@ export class CustomerController {
             limit = isNaN(limit) ? 15 : limit;
 
             const data = await this.customerService.getList(store, { offset, limit } as GetCustomerListDto);
+            return data;
+        } catch (err) {
+            if (err instanceof HttpException) throw err;
+            throw new HttpException(ErrorCode.ERR_INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @UseGuards(StoreJwtStrategyGuard)
+    @Get('/stores/me/customers/:id')
+    async GetMyCustomer(@Param() getCustomerParamData: GetCustomerParamDto, @Request() req) {
+        try {
+            const { id: store } = req.user;
+            const { id } = getCustomerParamData;
+
+            const data = await this.customerService.getItemById(id, store);
             return data;
         } catch (err) {
             if (err instanceof HttpException) throw err;

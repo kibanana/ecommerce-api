@@ -31,6 +31,7 @@ export class CustomFieldController {
         private customFieldService: CustomFieldService,
         private storeService: StoreService,
     ) {}
+    
     @UseGuards(StoreJwtStrategyGuard)
     @Post('/stores/me/custom-fields')
     async CreateCustomField(@Body() createCustomFieldData: CreateCustomFieldDto, @Request() req) {
